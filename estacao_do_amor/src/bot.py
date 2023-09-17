@@ -1,7 +1,11 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from dotenv import dotenv_values
+
+from estacao_do_amor.src.match.estacao_match import create_match
+from estacao_do_amor.src.match.take_image import open_browser
 from .secret import params_bot
+from pyrogram.types.user_and_chats.user import User
 
 
 
@@ -42,25 +46,37 @@ def main():
     
     @app.on_message(filters.command("confesso") & filters.group)
     async def confissao(Client, message: Message):
-        mensagem = f"Xiii🤫, eu amo uma confissão, mas não quero que todos fiquem sabendo. Me chame no privado e faça sua confissão. {private_chat}"
-        await message.reply(mensagem)
+        members = app.get_chat_members(message.chat.id)
+        chat_info = await app.get_chat(message.chat.id)
+        users = []
+        async for member in members:
+                user:User = member.user
+                users.append(user)
+        for user in users:
+            photo = user.photo
+            photo.big_file_id
+            file_name = f"{user.id}.jpg"
+            teste = await app.download_media(photo.big_file_id, file_name=file_name)
+            user.foto = teste
+
+        create_match(users[0], users[1])
+        file_name = open_browser()
+        await message.reply("Esse é o casal mais bonito desse grupo. ")
+        await app.send_photo(chat_info.id, file_name)
+        # mensagem = f"Xiii🤫, eu amo uma confissão, mas não quero que todos fiquem sabendo. Me chame no privado e faça sua confissão. {private_chat}"
+        # await message.reply(mensagem)
 
     @app.on_message(filters.command("confesso") & filters.private)
     async def confissao_private(Client, message: Message):
         mensagem = f"Abra seu coração pra mim. \nComece a mensagem escrevendo 'Eu confesso' para eu anotar tudo. Se não quiser dizer seu nome pode ficar tranquila que ninguém vai ficar sabendo."
         await message.reply(mensagem)
     
-    @app.on_message()
+    @app.on_message(filters.regex(r"(?i)eu confesso") & filters.private)
     async def conficao_message(Client, message: Message):
         if message.from_user and message.from_user.is_bot:
             return
-        confissao = message.text
-        trigger = "eu confesso"
         print(confissao)
-        if confissao.lower().startswith(trigger):
-            mensagem = "Pode ficar tranquilo que ninguém vai ficar sabendo. É nosso segredinho. 🤐🤐"
-        else:
-            mensagem = "Se for uma confissão, Comece a confissão com 'Eu confesso' para eu anotar tudo. Se não quiser dizer seu nome pode ficar tranquila que ninguém ficara sabendo."
+        mensagem = "Pode ficar tranquilo que ninguém vai ficar sabendo. É nosso segredinho. 🤐🤐"
         await message.reply(mensagem)
 
     app.run()

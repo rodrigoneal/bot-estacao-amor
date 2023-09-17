@@ -1,0 +1,70 @@
+/************************
+Tinder Template by Miami
+************************/
+@import 'https://fonts.googleapis.com/css?family=Dynalight';
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.NTMText{
+    margin-top: 50px;
+    text-align: center;
+    color: #000;
+}
+
+.match {
+    height: 430px;
+    width: 400px;
+    /* background-color: rgba(51,51,51,0.75); */
+    background-image: url(template.jpg);
+    background-size: cover; /* Torna a imagem de fundo preencher todo o elemento pai */
+    background-position: center; /* Centraliza a imagem de fundo */
+    background-repeat: no-repeat; /* Evita a repetição da imagem de fundo */
+    position: absolute;
+    z-index: 999999;
+}
+
+.match::before {
+    content: ""; /* Adicione um conteúdo vazio */
+    position: absolute; /* Defina a posição como absoluta */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover; /* Torna a imagem de fundo preencher todo o elemento pai */
+    background-position: center; /* Centraliza a imagem de fundo */
+    background-repeat: no-repeat; /* Evita a repetição da imagem de fundo */
+    background-image: inherit; /* Herda a imagem de fundo do elemento pai */
+    filter: blur(2px); /* Aplica um desfoque de 5 pixels à imagem de fundo */
+    z-index: -1; /* Coloque o pseudo-elemento atrás do conteúdo do elemento pai */
+}
+.mtext {
+    color: #000;
+    font-size: 80px;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    top: 50px;
+    font-family: 'Dynalight', cursive;
+}
+.m1, .m2 {
+    background-color: #fff;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    margin: 10px;
+    display: inline-block;
+    left: 30px;
+    top: 40px;
+}
+.m1 img, .m2 img {
+    width: 150px;
+    height: 150px;
+}

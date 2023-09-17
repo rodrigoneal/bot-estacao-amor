@@ -1,0 +1,5 @@
+beautifulsoup4==4.12.2
+Pyrogram==2.0.106
+python-dotenv==1.0.0
+selenium_tools @ git+https://github.com/rodrigoneal/selenium_tools@574df86316886ff1d0592d4f91992dd8474d6298
+TgCrypto==1.2.5
