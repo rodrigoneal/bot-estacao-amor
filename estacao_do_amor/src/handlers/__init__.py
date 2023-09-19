@@ -1,9 +1,11 @@
 from pyrogram import Client, filters
 from pyrogram.handlers import MessageHandler
 from . import handlers
-from.schedules_handlers import generate_match
+from.schedules_handlers import generate_match, last_episode
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+estacao_id = -4014608746
 
 
 def add_handlers(app: Client) -> None:
@@ -12,7 +14,8 @@ def add_handlers(app: Client) -> None:
     app.add_handler(MessageHandler(handlers.command_start_handler, filters.command("start")))
     app.add_handler(MessageHandler(handlers.command_help_handler, filters.command("help")))
     app.add_handler(MessageHandler(handlers.command_confesso_group_handler, filters.command("confesso") & filters.group))
-    app.add_handler(MessageHandler(handlers.command_confesso_private_handler, filters.regex(r"(?i)eu confesso") & filters.private))
+    app.add_handler(MessageHandler(handlers.command_confesso_private_handler, filters.command("confesso") & filters.private))
 
 def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
-    scheduler.add_job(generate_match, 'cron', day_of_week='mon', hour=18, minute=55, kwargs={"Client": app, "message": None})
+    scheduler.add_job(generate_match, 'cron', day_of_week='mon', hour=18, minute=55, kwargs={"Client": app})
+    scheduler.add_job(last_episode, 'cron', day_of_week=1, hour=1, minute=27, kwargs={"Client": app})
