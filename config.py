@@ -1,17 +1,15 @@
 import pyromod
-from pyrogram import Client
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from dotenv import dotenv_values
+from pyrogram import Client
 
 from estacao_do_amor.src.handlers import add_handlers, message_scheduler
-
-from dotenv import dotenv_values
 from estacao_do_amor.src.secret import params_bot
-
 
 config = dotenv_values(".env")
 params_bot = params_bot(config)
 
-app = Client("my_bot", test_mode=True)
+app = Client("my_bot", test_mode=True, **params_bot)
 
 scheduler = AsyncIOScheduler()
 

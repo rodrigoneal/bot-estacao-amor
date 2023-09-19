@@ -1,7 +1,7 @@
-from moviepy.editor import VideoClip, AudioFileClip
+import numpy as np
+from moviepy.editor import AudioFileClip, VideoClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_audio
 from PIL import Image
-import numpy as np
 
 # Caminho para o arquivo de áudio
 audio_path = 'estacao_do_amor/src/audio_video/musica.mp3'

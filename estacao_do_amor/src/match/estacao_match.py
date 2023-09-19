@@ -1,6 +1,7 @@
+from pathlib import Path
+
 from bs4 import BeautifulSoup
 from pyrogram.types.user_and_chats.user import User
-from pathlib import Path
 
 match_text_template = "{username_1} and {username_2} have liked each other."
 
