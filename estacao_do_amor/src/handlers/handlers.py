@@ -1,6 +1,6 @@
 from pyrogram import enums
 from pyrogram.client import Client
-from pyrogram.types import KeyboardButton, Message, ReplyKeyboardMarkup, Voice
+from pyrogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
 from pyrogram.enums import MessageMediaType
 
@@ -12,6 +12,9 @@ private_chat = "https://t.me/estacaodoamorbot"
 id_audio_ucrania = (
     "CQACAgEAAxkBAAIB2mUJ4QuXi-163DNzX0Mb1L2eoiWQAAK2AwACjGtQRIJkvxo6kCVvHgQ"
 )
+id_photo_nao_manda_foto = (
+    "CQACAgEAAxkBAAICOWUKZiR86f-9vBRNlrd5pZk6xl-qAAJjBAACkI1RRIMdrMLFbcraHgQ"
+)
 ricardo_financas_insta = "https://www.instagram.com/ricardoso.financas"
 MessageMediaType.VOICE
 teclado_personalizado = ReplyKeyboardMarkup(
@@ -21,7 +24,8 @@ teclado_personalizado = ReplyKeyboardMarkup(
     one_time_keyboard=True,
     placeholder="Escolha uma opção",
 )
-
+latitude, longitude = -22.87011531564289, -43.33998367799648
+location_parque_madureira = dict(latitude=latitude, longitude=longitude)
 
 async def new_member_handler(Client: Client, message: Message):
     # Loop para cumprimentar cada novo membro individualmente
@@ -37,15 +41,17 @@ async def new_member_handler(Client: Client, message: Message):
         )
 
 
-async def command_start_handler(client: Client, message: Message):
+async def command_start_handler(Client: Client, message: Message):
     mensagem = (
         "**Bem-vindo ao bot do podcast mais apaixonante do mundo!😍😍**\n\n"
         "Aqui estão algumas opções para interagir conosco:\n\n"
         "/confesso: Se você quiser compartilhar uma confissão e me conte essa fofoca😱.\n\n"
         "/correio: Se você deseja enviar uma mensagem no estilo 'correio do amor' e abra seu coração para o seu amor 💌.\n\n"
         "/link: Para obter o link para ouvir e seguir a Estação do Amor 🎙.\n\n"
-        "/sugestao: Se você tiver alguma sugestão ou desejar fazer uma reclamação. Pode hablar 🗣\n\n"
+        "/parceiros: Empresas que ajudam esse podcast 🤝.\n\n"
+        "/sugestao: Se você tiver alguma sugestão ou desejar fazer uma reclamação. Pode hablar 🦻\n\n"
         "/cerveja: Se quiser convidar a gente para beber a resposta é sempre **SIM** 🍻.\n\n"
+        "/contato: Se quiser falar com a gente é só entrar em contato 🗣.\n\n"
         "Muito amor pra você, __lindx__ 💋"
     )
     await message.reply(mensagem, parse_mode=enums.ParseMode.MARKDOWN)
@@ -55,7 +61,7 @@ async def command_link_handler(Client: Client, message: Message):
     await message.reply(link_tree)
 
 
-async def command_help_handler(client: Client, message: Message):
+async def command_help_handler(Client: Client, message: Message):
     mensagem = (
         "É a sua primeira vez aqui? Fique tranquilo, estou aqui para te guiar com carinho e ensinar você como funciona.\n"
         f"Se você quiser fazer uma confissão, compartilhar uma sugestão ou enviar uma mensagem cheia de amor, basta me chamar na nossa conversa particular [Apaixonado Bot]({private_chat})! \n"
@@ -64,7 +70,7 @@ async def command_help_handler(client: Client, message: Message):
     await message.reply(mensagem, parse_mode=enums.ParseMode.MARKDOWN)
 
 
-async def command_parceiria_handler(client: Client, message: Message):
+async def command_parceiria_handler(Client: Client, message: Message):
     await message.reply(
         (
             "Nossa missão é ajudar você a realizar seus sonhos através de uma abordagem cuidadosamente planejada com investimentos estratégicos."
@@ -90,13 +96,13 @@ async def command_correio_handler(Client: Client, message: Message):
     )
 
 
-async def command_confesso_group_handler(client: Client, message: Message):
+async def command_confesso_group_handler(Client: Client, message: Message):
     await message.reply(
         f"Xiii🤫, eu amo uma confissão, mas não quero que todos fiquem sabendo. Me chame no privado e faça sua confissao. {private_chat}"
     )
 
 
-async def command_confesso_private_handler(client: Client, message: Message):
+async def command_confesso_private_handler(Client: Client, message: Message):
     if message.from_user and message.from_user.is_bot:
         return
     answer = await message.chat.ask(
@@ -125,12 +131,24 @@ async def audio_voice_handler(Client: Client, message: Message):
 
 
 async def picture_handler(Client: Client, message: Message):
-    await message.reply(
-        "Você parece ter se confundido de aplicativo; estamos usando o Telegram aqui, enquanto o aplicativo para compartilhamento de fotos é o Instagram!"
+    await Client.send_audio(
+        message.chat.id,
+        id_photo_nao_manda_foto,
+        caption="Conhece aquela dupla sertaneja NemVi e NemVerei? 😂",
     )
 
 
-async def command_correio_group_handler(client: Client, message: Message):
+async def command_correio_group_handler(Client: Client, message: Message):
     await message.reply(
         f"Você não pretende revelar seu amor diante de todos, certo? Me convide para uma conversa privada e compartilhe comigo quem é o(a) sortudo(a). {private_chat}"
     )
+
+
+async def command_cerveja_handle(Client: Client, message: Message):
+    date = await message.chat.ask("Me fala a data desse gelo! 🍺 DD/MM")
+    await message.reply("Pode deixar que nossa assessoria vai entrar em contato para confirmar o horário, mas o local é certo.")
+    await Client.send_venue(message.chat.id, latitude, longitude, title="Parque Madureira", address="Rio de Janeiro")
+
+async def command_contact_handler(Client: Client, message: Message):
+    await message.reply("Email para contato: [Email](estacaodoamors2@gmail.com)", parse_mode=enums.ParseMode.MARKDOWN)
+    await message.reply("Instagram do [David](https://www.instagram.com/daredaves_/),[Rodrigo](https://www.instagram.com/rodrigoneal/) e [Thauan](https://www.instagram.com/moreirathau/) para contato", parse_mode=enums.ParseMode.MARKDOWN)
