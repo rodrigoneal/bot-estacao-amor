@@ -2,7 +2,6 @@ APScheduler==3.10.4
 moviepy==1.0.3
 Pillow==10.0.1
 python-dotenv==1.0.0
-selenium_tools @ git+https://github.com/rodrigoneal/selenium_tools@574df86316886ff1d0592d4f91992dd8474d6298
 TgCrypto==1.2.5
 pyrogram==2.0.106
 pyromod==2.1.0

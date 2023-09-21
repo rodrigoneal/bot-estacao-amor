@@ -27,6 +27,7 @@ teclado_personalizado = ReplyKeyboardMarkup(
 latitude, longitude = -22.87011531564289, -43.33998367799648
 location_parque_madureira = dict(latitude=latitude, longitude=longitude)
 
+
 async def new_member_handler(Client: Client, message: Message):
     # Loop para cumprimentar cada novo membro individualmente
     for new_member in message.new_chat_members:
@@ -39,6 +40,10 @@ async def new_member_handler(Client: Client, message: Message):
                 "Se tiver alguma dúvida, basta digitar /help, e estaremos prontos para guiá-lo e ajudá-lo a aproveitar ao máximo o bot."
             )
         )
+
+
+async def left_member_handler(Client: Client, message: Message):
+    await message.reply("Parece que o amor não venceu! 😔")
 
 
 async def command_start_handler(Client: Client, message: Message):
@@ -72,9 +77,9 @@ async def command_help_handler(Client: Client, message: Message):
 
 async def command_parceiria_handler(Client: Client, message: Message):
     await message.reply(
-        (
-            "Nossa missão é ajudar você a realizar seus sonhos através de uma abordagem cuidadosamente planejada com investimentos estratégicos."
-            f"Conte conosco para transformar suas metas em realidade! \n [Ricardo Finanças]({ricardo_financas_insta})"
+        (   f"[Ricardo Finanças]({ricardo_financas_insta}) \n"
+            "Nossa missão é ajudar você a realizar seus sonhos através de uma abordagem cuidadosamente planejada com investimentos estratégicos. "
+            "Conte conosco para transformar suas metas em realidade!"
         ),
         parse_mode=enums.ParseMode.MARKDOWN,
     )
@@ -146,9 +151,24 @@ async def command_correio_group_handler(Client: Client, message: Message):
 
 async def command_cerveja_handle(Client: Client, message: Message):
     date = await message.chat.ask("Me fala a data desse gelo! 🍺 DD/MM")
-    await message.reply("Pode deixar que nossa assessoria vai entrar em contato para confirmar o horário, mas o local é certo.")
-    await Client.send_venue(message.chat.id, latitude, longitude, title="Parque Madureira", address="Rio de Janeiro")
+    await message.reply(
+        "Pode deixar que nossa assessoria vai entrar em contato para confirmar o horário, mas o local é certo."
+    )
+    await Client.send_venue(
+        message.chat.id,
+        latitude,
+        longitude,
+        title="Parque Madureira",
+        address="Rio de Janeiro",
+    )
+
 
 async def command_contact_handler(Client: Client, message: Message):
-    await message.reply("Email para contato: [Email](estacaodoamors2@gmail.com)", parse_mode=enums.ParseMode.MARKDOWN)
-    await message.reply("Instagram do [David](https://www.instagram.com/daredaves_/),[Rodrigo](https://www.instagram.com/rodrigoneal/) e [Thauan](https://www.instagram.com/moreirathau/) para contato", parse_mode=enums.ParseMode.MARKDOWN)
+    await message.reply(
+        "Email para contato: [Email](estacaodoamors2@gmail.com)",
+        parse_mode=enums.ParseMode.MARKDOWN,
+    )
+    await message.reply(
+        "Instagram do [David](https://www.instagram.com/daredaves_/),[Rodrigo](https://www.instagram.com/rodrigoneal/) e [Thauan](https://www.instagram.com/moreirathau/) para contato",
+        parse_mode=enums.ParseMode.MARKDOWN,
+    )

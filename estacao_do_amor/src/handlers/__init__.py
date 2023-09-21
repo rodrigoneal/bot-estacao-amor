@@ -12,6 +12,7 @@ estacao_id = -4014608746
 
 def add_handlers(app: Client) -> None:
     app.add_handler(MessageHandler(handlers.new_member_handler, filters.new_chat_members))
+    app.add_handler(MessageHandler(handlers.left_member_handler, filters.left_chat_member))
     app.add_handler(MessageHandler(handlers.command_start_handler, filters.command("start")))
     app.add_handler(MessageHandler(handlers.command_link_handler, filters.command("link")))
     app.add_handler(MessageHandler(handlers.command_help_handler, filters.command("help")))
@@ -20,8 +21,8 @@ def add_handlers(app: Client) -> None:
     app.add_handler(MessageHandler(handlers.command_correio_handler, filters.command("correio") & filters.private))
     app.add_handler(MessageHandler(handlers.command_confesso_group_handler, filters.command("confesso") & filters.group))
     app.add_handler(MessageHandler(handlers.command_confesso_private_handler, filters.command("confesso") & filters.private))
-    app.add_handler(MessageHandler(handlers.command_cerveja_handle, filters.command("cerveja") & filters.private))
-    app.add_handler(MessageHandler(handlers.command_contact_handler, filters.command("contato") & filters.private))
+    app.add_handler(MessageHandler(handlers.command_cerveja_handle, filters.command("cerveja")))
+    app.add_handler(MessageHandler(handlers.command_contact_handler, filters.command("contato")))
     app.add_handler(MessageHandler(handlers.audio_voice_handler, filters.audio | filters.voice))
     app.add_handler(MessageHandler(handlers.picture_handler, filters.photo | filters.video))
 
