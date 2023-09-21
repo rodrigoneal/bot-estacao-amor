@@ -172,3 +172,4 @@ async def command_contact_handler(Client: Client, message: Message):
         "Instagram do [David](https://www.instagram.com/daredaves_/),[Rodrigo](https://www.instagram.com/rodrigoneal/) e [Thauan](https://www.instagram.com/moreirathau/) para contato",
         parse_mode=enums.ParseMode.MARKDOWN,
     )
+

@@ -2,6 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.handlers import MessageHandler
 
 from . import handlers
+from. import automation_handlers
 
 from.schedules_handlers import generate_match, last_episode
 
@@ -25,6 +26,8 @@ def add_handlers(app: Client) -> None:
     app.add_handler(MessageHandler(handlers.command_contact_handler, filters.command("contato")))
     app.add_handler(MessageHandler(handlers.audio_voice_handler, filters.audio | filters.voice))
     app.add_handler(MessageHandler(handlers.picture_handler, filters.photo | filters.video))
+    # Handlers automatizar o podcast
+    app.add_handler(MessageHandler(automation_handlers.create_youtube_video, filters.command("video")))
 
 def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
     scheduler.add_job(generate_match, 'cron', day_of_week=4, hour=19, minute=0, kwargs={"Client": app}) # Envia toda sexta às 19:00 o match dos membros do grupo
