@@ -1,26 +1,49 @@
-from pyrogram import enums
+from io import BytesIO
+import os
+import tempfile
 from pyrogram.client import Client
-from pyrogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
+from pyrogram.types import Message
+
+from estacao_do_amor.src.audio_video.video import create_video
 
 
-async def progresso(
+async def progress_media(
     current: int,
     total: int,
     Client: Client,
-    chat_id: int,
-    message_id: int,
+    message: Message,
+    media_type:str
 ):
     enviado = (current / total) * 100
-    text = f"Enviado: {round(enviado, 2)}% Concluído."
-    await Client.edit_message_text(chat_id,message_id, text)
+    text = f"{media_type}: {round(enviado, 2)}% Concluído."
+    await Client.edit_message_text(message.chat.id, message.id, text)
 
 
 async def create_youtube_video(Client: Client, message: Message):
-    initial_message = await message.reply_text("Criando vídeo...")
-    chat_id = initial_message.chat.id
-    message_id = initial_message.id
-    await message.reply_video(
-        "/Users/rodrigoneal/Documents/projetos/bot-estacao-amor/video_final.mp4",
-        progress=progresso,
-        progress_args=(Client, chat_id, message_id),
-    )
+    # Pedindo as midias para criar o video.
+    with tempfile.NamedTemporaryFile(suffix=".jpg") as imagem_file, tempfile.NamedTemporaryFile(suffix=".mp3") as audio_file, tempfile.NamedTemporaryFile(suffix=".mp4") as video_file:
+        # Salvando imagem
+        ep_image: Message = await message.chat.ask("Me envie a thumbnail do episodio. 🖼")
+        write_progress = await message.reply_text("Salvando imagem, aguarde...")
+        temporary_image:BytesIO = await ep_image.download(in_memory=True, progress=progress_media, progress_args=(Client,write_progress, "Salvando imagem"))
+        # Salvando audio
+        ep_audio: Message = await message.chat.ask("Me envie o audio do episodio. 🎙")
+        write_progress = await message.reply_text("Salvando audio, aguarde...")
+        temporary_audio:BytesIO = await ep_audio.download(in_memory=True,progress=progress_media, progress_args=(Client, write_progress, "Salvando audio"))
+
+
+        # Gravando no arquivo tempório
+        imagem_file.write(temporary_image.getvalue())
+        audio_file.write(temporary_audio.getvalue())
+        # Criando o video
+        await message.reply_text("Criando o video, pode demorar alguns segundos...")
+        create_video(imagem_file.name, audio_file.name, video_file.name)
+    # Uploadando o video
+        upload_messsage = await message.reply_text("Criando vídeo...")
+        await message.reply_video(
+            video_file.name,
+            progress=progress_media,
+            progress_args=(Client, upload_messsage, "Upload Video"),
+        )
+    temporary_image.close()
+    temporary_audio.close()

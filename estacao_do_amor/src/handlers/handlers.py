@@ -77,7 +77,8 @@ async def command_help_handler(Client: Client, message: Message):
 
 async def command_parceiria_handler(Client: Client, message: Message):
     await message.reply(
-        (   f"[Ricardo Finanças]({ricardo_financas_insta}) \n"
+        (
+            f"[Ricardo Finanças]({ricardo_financas_insta}) \n"
             "Nossa missão é ajudar você a realizar seus sonhos através de uma abordagem cuidadosamente planejada com investimentos estratégicos. "
             "Conte conosco para transformar suas metas em realidade!"
         ),
@@ -127,11 +128,11 @@ async def command_confesso_private_handler(Client: Client, message: Message):
 
 async def audio_voice_handler(Client: Client, message: Message):
     await message.reply("Opa! Começou o podcast! 🎙")
-    await Client.send_audio(
-        message.chat.id,
-        id_audio_ucrania,
-        duration=6,
+    await message.reply_voice(
+        "estacao_do_amor/media/ucrania.mp3",
         caption="Não mande áudios que eu não sou nenhuma safada pra ficar ouvindo áudios",
+        duration=6,
+        quote=True,
     )
 
 
@@ -172,4 +173,3 @@ async def command_contact_handler(Client: Client, message: Message):
         "Instagram do [David](https://www.instagram.com/daredaves_/),[Rodrigo](https://www.instagram.com/rodrigoneal/) e [Thauan](https://www.instagram.com/moreirathau/) para contato",
         parse_mode=enums.ParseMode.MARKDOWN,
     )
-
