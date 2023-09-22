@@ -1,8 +1,7 @@
 from pyrogram import enums
 from pyrogram.client import Client
-from pyrogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
-
 from pyrogram.enums import MessageMediaType
+from pyrogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
 # TODO criar os comandos de correio do amor e sugestão.
 

@@ -2,9 +2,10 @@ from pyrogram import Client, filters
 from pyrogram.handlers import MessageHandler
 
 from . import handlers
+
 from. import automation_handlers
 
-from.schedules_handlers import generate_match, last_episode
+from.schedules_handlers import generate_match
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -31,4 +32,4 @@ def add_handlers(app: Client) -> None:
 
 def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
     scheduler.add_job(generate_match, 'cron', day_of_week=4, hour=19, minute=0, kwargs={"Client": app}) # Envia toda sexta às 19:00 o match dos membros do grupo
-    scheduler.add_job(last_episode, 'cron', day_of_week=1, hour=10, minute=30, kwargs={"Client": app}) # Envia o ultimo episodio do podcast todas as terça as 10:30
+    # scheduler.add_job(last_episode, 'cron', day_of_week=1, hour=10, minute=30, kwargs={"Client": app}) # Envia o ultimo episodio do podcast todas as terça as 10:30
