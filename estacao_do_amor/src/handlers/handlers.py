@@ -1,7 +1,11 @@
+import functools
+from typing import Callable
 from pyrogram import enums
 from pyrogram.client import Client
 from pyrogram.enums import MessageMediaType
 from pyrogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
+
+from estacao_do_amor.src.domain.schemas.correio_schema import Correio
 
 # TODO criar os comandos de correio do amor e sugestão.
 
@@ -96,6 +100,12 @@ async def command_correio_handler(Client: Client, message: Message):
             duration=6,
         )
         return
+    identificar = await message.chat.ask(
+        "Deseja se identificar? 🤔",
+    )
+    if identificar.text == "Sim":
+        remetente = message.chat.first_name
+    Correio()
     await message.reply(
         "Obrigado por compartilhar conosco! 🤗 Vamos espalhar esse amor para o mundo inteiro. ❤️🔥❤️🔥❤️"
     )

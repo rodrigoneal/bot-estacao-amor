@@ -1,9 +1,8 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from estacao_do_amor.src.domain.repositories.abstract_repository import \
-    AbstractReposity
-from estacao_do_amor.src.domain.repositories.podcast_repository import \
-    PodcastRepository
+from estacao_do_amor.src.domain.repositories.abstract_repository import AbstractReposity
+from estacao_do_amor.src.domain.repositories.correio_repository import CorreioRepository
+from estacao_do_amor.src.domain.repositories.podcast_repository import PodcastRepository
 
 
 class Repositories:
@@ -18,10 +17,11 @@ class Repositories:
             Método interno que associa o objeto `async_session_maker` a todos os repositórios presentes na instância da classe.
 
     """
+
     def __init__(self, async_session_maker: async_sessionmaker) -> None:
         self.async_session_maker = async_session_maker
         self._reflection()
-    
+
     def _reflection(self):
         """
         Método interno que associa o objeto `async_session_maker` a todos os repositórios presentes na instância da classe.
@@ -35,8 +35,7 @@ class Repositories:
                 continue
             atributo_real = getattr(self, atributo)
             if isinstance(atributo_real, AbstractReposity):
-                atributo_real.async_session_maker = self.async_session_maker # type: ignore
-
+                atributo_real.async_session_maker = self.async_session_maker  # type: ignore
 
 
 class Repository(Repositories):
@@ -53,3 +52,4 @@ class Repository(Repositories):
     """
 
     podcast_repository: PodcastRepository = PodcastRepository()
+    correio_repository: CorreioRepository = CorreioRepository()
