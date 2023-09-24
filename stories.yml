@@ -1,0 +1,28 @@
+version: "3.1"
+
+stories:
+  - story: command_confesso_private_story
+    steps:
+      - intent: certificado
+      - action: utter_certificado_mensagem
+      - action: cpf_form
+      - active_loop: cpf_form
+      - slot_was_set:
+          - requested_slot: cpf_cnpj
+      - slot_was_set:
+          - requested_slot: null
+      - active_loop: null
+      - action: utter_confirmar_cpf
+      
+  - story: command_correio_private_story
+    steps:
+      - intent: certificado
+      - action: utter_certificado_mensagem
+      - action: cpf_form
+      - active_loop: cpf_form
+      - slot_was_set:
+          - requested_slot: cpf_cnpj
+      - slot_was_set:
+          - requested_slot: null
+      - active_loop: null
+      - action: utter_confirmar_cpf

@@ -1,3 +1,5 @@
+import traceback
+
 from pyrogram import enums
 from pyrogram.client import Client
 from pyrogram.types import CallbackQuery, Message
@@ -11,6 +13,12 @@ from estacao_do_amor.src.handlers.keyboard import (
 
 teclado = create_option_keyboard(["Sim", "Não"])
 
+async def testando(name):
+    stack = traceback.extract_stack()
+    func_name = [s.name for s in stack if s.name.endswith("handler")]
+    breakpoint()
+
+    pass
 
 async def new_member_handler(Client: Client, message: Message):
     # Loop para cumprimentar cada novo membro individualmente
@@ -125,6 +133,7 @@ async def command_confesso_group_handler(Client: Client, message: Message):
 
 
 async def command_confesso_private_handler(Client: Client, message: Message):
+    await testando(__spec__.name)
     if message.from_user and message.from_user.is_bot:
         return
     await message.chat.ask(
@@ -138,6 +147,7 @@ async def command_confesso_private_handler(Client: Client, message: Message):
         "Menina, Isso é bafão! Eu posso falar isso no podcast? ",
         reply_markup=teclado,
     )
+
     response = await anonimo.wait_for_click()
     await response.message.edit_text(
         f"{response.message.text} = {response.data}"

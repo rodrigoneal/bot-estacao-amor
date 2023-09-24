@@ -18,7 +18,7 @@ async def test_se_atualiza_o_usuario_se_existe(get_repository):
     first_query = await insert_if_not_exist(
         repositories.user_message_repository, 2
     )
-    await sleep(5)
+    await sleep(1)
     await update(repositories.user_message_repository, 2)
     second_query = await read(repositories.user_message_repository, 2)
     assert not first_query.updated_at == second_query.updated_at

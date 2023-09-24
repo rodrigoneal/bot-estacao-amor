@@ -1,0 +1,12 @@
+responses:
+    utter_confesso_saudar:
+        - ask: >-
+              Conte logo essa fofoca!
+              OBS: Só não mande áudios que eu não sou nenhuma safada pra ficar ouvindo áudios
+    utter_confesso_bafao:
+        - reply: Menina, Isso é bafão! Eu posso falar isso no podcast?
+          buttons:
+              - title: Pode
+                payload: Sim
+              - title: Não
+                payload: Nao
