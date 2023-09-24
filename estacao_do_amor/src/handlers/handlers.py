@@ -3,13 +3,14 @@ from pyrogram.client import Client
 from pyrogram.types import CallbackQuery, Message
 
 from estacao_do_amor.src import CONSTANTS, love_bot_responses
+from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
+from estacao_do_amor.src.domain.repositories.correio_repository import (
+    CorreioRepository,
+)
 from estacao_do_amor.src.domain.schemas.correio_schema import Correio
 from estacao_do_amor.src.domain.usecases import correio_usecase
-from estacao_do_amor.src.handlers.keyboard import (
-    create_option_keyboard,
-)
 
-teclado = create_option_keyboard(["Sim", "Não"])
+from estacao_do_amor.src.handlers.util import handler_bot
 
 
 async def new_member_handler(Client: Client, message: Message):
@@ -56,44 +57,46 @@ async def command_partner_handler(Client: Client, message: Message):
     )
 
 
-async def command_correio_handler(Client: Client, message: Message):
+@handler_bot
+async def command_correio_handler(
+    Client: Client,
+    message: Message,
+    repository: CorreioRepository,
+    utter_message: UtterMessage,
+):
     remetente = None
     await message.reply(love_bot_responses.correio_first_respose)
     destinatario = await message.chat.ask(
-        (
-            "Para quem você quer enviar"
-            " o correio do amor? Fala o nome do(a) sortudo(a) 👩‍❤️‍👨 💌"
-        )
+        utter_message["utter_boas_vindas_correio"].text
     )
+    identificar_response = utter_message["utter_identicar_correio"]
     identificar = await message.reply(
-        "Deseja se identificar? 🤔",
-        reply_markup=teclado,
+        identificar_response.text,
+        reply_markup=identificar_response.keyboard,
     )
     response = await identificar.wait_for_click(alert="Deseja se identificar?")
 
     await response.message.edit_text(
         f"{response.message.text} = {response.data}"
     )
-    if response.data == "Sim":
+    if response.data == "aceito":
+        mudar_nome = utter_message["utter_escolher_nome_correio"]
         nome_response = await message.reply(
-            f"Deseja usar o nome {message.chat.first_name}? 🤔",
-            reply_markup=teclado,
+            mudar_nome.text.format(name=message.chat.first_name),
+            reply_markup=mudar_nome.keyboard,
         )
-        resposta = await nome_response.wait_for_click()
-        await resposta.message.edit_text(
-            f"{resposta.message.text} = {resposta.data}"
+        response = await nome_response.wait_for_click()
+        await response.message.edit_text(
+            f"{response.message.text} = {response.data}"
         )
-        if resposta.data == "Sim":
+        if response.data == "aceito":
             remetente = message.chat.first_name
         else:
             nome = await message.chat.ask("Escreva seu nome")
             remetente = nome.text
 
     mensagem = await message.chat.ask(
-        (
-            "Agora deixe seu coração"
-            " falar e escreva tudo o que sente por essa pessoa. 🤗"
-        )
+        utter_message["utter_escreva_mensagem_correio"].text
     )
 
     correio = Correio(
@@ -101,48 +104,45 @@ async def command_correio_handler(Client: Client, message: Message):
         remetente=remetente,
         mensagem=mensagem.text,
     )
-    await correio_usecase.create(
-        repository=Client.repository.correio_repository, correio_schema=correio
-    )
+    await correio_usecase.create(repository=repository, correio_schema=correio)
     await message.reply(
-        (
-            "Obrigado por compartilhar"
-            " conosco! 🤗 Vamos espalhar esse"
-            " amor para o mundo inteiro. ❤️🔥❤️🔥❤️"
+        utter_message["utter_agradecendo_correio"].text,
+    )
+
+
+@handler_bot
+async def command_confesso_group_handler(
+    Client: Client,
+    message: Message,
+    utter_message: UtterMessage,
+):
+    await message.reply(
+        utter_message["utter_confesso_group"].text.format(
+            private_chat=CONSTANTS.PRIVATE_CHAT
         )
     )
 
 
-async def command_confesso_group_handler(Client: Client, message: Message):
-    await message.reply(
-        (
-            "Xiii🤫, eu amo uma confissão, "
-            "mas não quero que todos fiquem sabendo. "
-            "Me chame no privado"
-            f" e faça sua confissao. {CONSTANTS.PRIVATE_CHAT}"
-        )
-    )
-
-
-async def command_confesso_private_handler(Client: Client, message: Message):
+@handler_bot
+async def command_confesso_private_handler(
+    Client: Client,
+    message: Message,
+    repository: CorreioRepository,
+    utter_message: UtterMessage,
+):
     if message.from_user and message.from_user.is_bot:
         return
-    await message.chat.ask(
-        (
-            "Conte logo essa fofoca!\n"
-            "OBS: Só não mande áudios"
-            " que eu não sou nenhuma safada pra ficar ouvindo áudios"
-        )
-    )
+    await message.chat.ask(utter_message["utter_boas_vindas_confesso"].text)
+    utter_fofoca = utter_message["utter_surpresa_confesso"]
     anonimo = await message.reply(
-        "Menina, Isso é bafão! Eu posso falar isso no podcast? ",
-        reply_markup=teclado,
+        utter_fofoca.text,
+        reply_markup=utter_fofoca.keyboard,
     )
     response = await anonimo.wait_for_click()
     await response.message.edit_text(
         f"{response.message.text} = {response.data}"
     )
-    if response.data == "Não":
+    if response.data == "rejeitado":
         resposta = (
             "Pra que me conta a fofoca se eu não posso espalhar?😔,"
             " mas vou respeitar e venha sempre contar fofoca pra mim."

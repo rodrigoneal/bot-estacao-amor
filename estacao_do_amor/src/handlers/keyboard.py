@@ -18,9 +18,9 @@ def create_keyboard(
     )
 
 
-def create_option_keyboard(options: list[str]) -> InlineKeyboardMarkup:
+def create_option_keyboard(options: list[str, str]) -> InlineKeyboardMarkup:
     return ikb(
         [
-            [(option, option) for option in options],
+            [(option[0], option[1]) for option in options],
         ]
     )

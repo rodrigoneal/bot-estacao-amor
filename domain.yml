@@ -1,0 +1,53 @@
+responses:
+  utter_boas_vindas_correio:
+    - text: >
+        Para quem você quer enviar o correio do amor?
+        Fala o nome do(a) sortudo(a) 👩‍❤️‍👨 💌"
+
+  utter_identicar_correio:
+    - text: Deseja se identificar? 🤔
+    - buttons:
+        - title: Sim
+          payload: aceito
+        - title: Não
+          payload: rejeitado
+
+  utter_escolher_nome_correio:
+    - text: "Deseja usar o nome: {name}? 🤔"
+    - buttons:
+        - title: Sim
+          payload: aceito
+        - title: Não
+          payload: rejeitado
+
+  utter_escreva_mensagem_correio:
+    - text: >
+        Agora deixe seu coração
+        falar e escreva tudo o que sente por essa pessoa. 🤗
+
+  utter_agradecendo_correio:
+    - text: >
+        Obrigado por compartilhar
+        conosco! 🤗 Vamos espalhar esse
+        amor para o mundo inteiro. ❤️🔥❤️🔥❤️
+
+  utter_confesso_group:
+    - text: >
+        Xiii🤫, eu amo uma confissão, 
+        mas mas não quero que todos fiquem sabendo. 
+        Me chame no privado
+        e faça sua confissao. {private_chat}
+  
+  utter_boas_vindas_confesso:
+    - text: >
+        Conte logo essa fofoca!\n
+        OBS: Só não mande áudios
+         que eu não sou nenhuma safada pra ficar ouvindo áudios
+  
+  utter_surpresa_confesso:
+    - text: "Menina, Isso é bafão! Eu posso falar isso no podcast? "
+    - buttons:
+        - title: Sim
+          payload: aceito
+        - title: Não
+          payload: rejeitado

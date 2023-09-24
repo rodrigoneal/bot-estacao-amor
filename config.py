@@ -1,5 +1,6 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import dotenv_values
+import pyromod
 from pyrogram import Client
 
 from estacao_do_amor.src.domain.repositories.repositories import Repository
