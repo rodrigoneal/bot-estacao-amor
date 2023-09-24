@@ -1,6 +1,5 @@
 import numpy as np
 from moviepy.editor import AudioFileClip, VideoClip
-from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_audio
 from PIL import Image
 
 
@@ -14,10 +13,7 @@ def create_video(image_path: str, audio_path: str, filename: str):
         return quadro
 
     # Crie um videoclipe com a imagem em movimento
-    video_clip = VideoClip(
-        criar_quadro,
-        duration=10
-    ) 
+    video_clip = VideoClip(criar_quadro, duration=10)
 
     audio_clip = AudioFileClip(audio_path)
     video_final = video_clip.set_audio(audio_clip)

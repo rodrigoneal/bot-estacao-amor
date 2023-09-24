@@ -15,7 +15,6 @@ def test_se_pega_os_dados_do_feed():
         "season": 1,
         "duration": 1151,
         "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_episode/38376440/38376440-1693243956446-85f70b24a28ca.jpg",
-
     }
 
     anchor_feed = AnchorFeed()

@@ -10,14 +10,18 @@ from estacao_do_amor.src.feed.feed_rss import AnchorFeed
 
 URI = r"sqlite+aiosqlite:///teste.db"
 
+
 @pytest.fixture
-def get_repository(create_table):
-    return  Repository(create_table)
+def get_repository(create_table) -> Repository:
+    return Repository(create_table)
+
 
 @pytest.fixture()
 async def create_engine():
     engine = create_async_engine(URI)
     return engine
+
+
 @pytest.fixture()
 async def create_table(create_engine):
     engine = create_engine
@@ -28,9 +32,10 @@ async def create_table(create_engine):
         await conn.run_sync(Base.metadata.drop_all)
         Path("teste.db").unlink(missing_ok=True)
 
+
 @pytest.fixture
 def get_cursor():
-    conn = sqlite3.connect('teste.db')
+    conn = sqlite3.connect("teste.db")
     cursor = conn.cursor()
     return cursor
 

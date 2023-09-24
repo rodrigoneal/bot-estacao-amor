@@ -28,14 +28,18 @@ async def create_youtube_video(Client: Client, message: Message):
         ep_image: Message = await message.chat.ask(
             "Me envie a thumbnail do episodio. 🖼"
         )
-        write_progress = await message.reply_text("Salvando imagem, aguarde...")
+        write_progress = await message.reply_text(
+            "Salvando imagem, aguarde..."
+        )
         temporary_image: BytesIO = await ep_image.download(
             in_memory=True,
             progress=progress_media,
             progress_args=(Client, write_progress, "Salvando imagem"),
         )
         # Salvando audio
-        ep_audio: Message = await message.chat.ask("Me envie o audio do episodio. 🎙")
+        ep_audio: Message = await message.chat.ask(
+            "Me envie o audio do episodio. 🎙"
+        )
         write_progress = await message.reply_text("Salvando audio, aguarde...")
         temporary_audio: BytesIO = await ep_audio.download(
             in_memory=True,
@@ -47,7 +51,9 @@ async def create_youtube_video(Client: Client, message: Message):
         imagem_file.write(temporary_image.getvalue())
         audio_file.write(temporary_audio.getvalue())
         # Criando o video
-        await message.reply_text("Criando o video, pode demorar alguns segundos...")
+        await message.reply_text(
+            "Criando o video, pode demorar alguns segundos..."
+        )
         create_video(imagem_file.name, audio_file.name, video_file.name)
         # Uploadando o video
         upload_messsage = await message.reply_text("Criando vídeo...")

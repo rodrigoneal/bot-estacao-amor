@@ -8,11 +8,12 @@ class AnchorFeed:
     def __init__(self):
         self.url = "https://anchor.fm/s/e5566360/podcast/rss"
         self.feed_parser = self._parser_feed()
+
     def _parser_feed(self) -> FeedParserDict:
         return feedparser.parse(self.url)
 
     def podcast_episodes(self) -> Podcast:
-        podcast = Podcast() 
+        podcast = Podcast()
         for entrie in self.feed_parser.entries:
             episode = Episode(
                 title=entrie["title"],
@@ -23,11 +24,10 @@ class AnchorFeed:
                 audio=entrie["links"][-1]["href"],
                 episode=entrie["itunes_episode"],
                 season=entrie["itunes_season"],
-                duration=entrie["itunes_duration"]
+                duration=entrie["itunes_duration"],
             )
             podcast.episodes.append(episode)
         return podcast
 
     def __repr__(self) -> str:
         return f"AnchorFeed(url={self.url})"
-    
