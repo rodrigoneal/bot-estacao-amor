@@ -2,5 +2,6 @@ from pydantic import BaseModel
 
 
 class Confesso(BaseModel):
-    confissao: str
-    user: str | None
+    mensagem: str
+    user_name: str | None
+    user_id: int | None

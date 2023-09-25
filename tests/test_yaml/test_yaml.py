@@ -1,7 +1,6 @@
 from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
 from estacao_do_amor.src.handlers.keyboard import create_option_keyboard
 
-
 utter_message = UtterMessage()
 
 def test_se_pega_os_valores_do_yaml():

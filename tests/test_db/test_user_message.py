@@ -1,10 +1,7 @@
 from asyncio import sleep
 
 from estacao_do_amor.src.domain.usecases.user_message_usecase import (
-    insert_if_not_exist,
-    read,
-    update,
-)
+    insert_if_not_exist, read, update)
 
 
 async def test_se_cria_um_novo_usuario_se_nao_existe(get_repository):

@@ -1,6 +1,5 @@
-from estacao_do_amor.src.domain.repositories.user_menssage_repository import (
-    UserMessageRepository,
-)
+from estacao_do_amor.src.domain.repositories.user_menssage_repository import \
+    UserMessageRepository
 
 
 async def insert_if_not_exist(repository: UserMessageRepository, user_id: int):

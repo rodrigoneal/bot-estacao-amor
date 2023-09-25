@@ -26,3 +26,4 @@ URL_SPOTIFY: Final[
     str
 ] = "https://open.spotify.com/show/4xSaSaM9N3aIIJdycGvjTJ?si=5b081ca4364f4a87"
 URI_INDEX = "estacao_do_amor/src/match/static/index.html"
+UCRANIA_AUDIO_FILE: Final[str] = "estacao_do_amor/media/ucrania.mp3"

@@ -2,8 +2,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pyrogram import Client, filters
 from pyrogram.handlers import CallbackQueryHandler, MessageHandler
 
-from . import automation_handlers, handlers
-from . import schedules_handlers
+from . import automation_handlers, handlers, schedules_handlers
 
 
 def add_handlers(app: Client) -> None:
@@ -65,6 +64,17 @@ def add_handlers(app: Client) -> None:
             handlers.command_contact_handler, filters.command("contato")
         )
     )
+    app.add_handler(
+        MessageHandler(
+            handlers.command_feedback_handler, filters.command("feedback") & filters.private
+        )
+    )
+    app.add_handler(
+        MessageHandler(
+            handlers.command_feedback_handler_group, filters.command("feedback") & filters.group
+        )
+    )
+
     # Handlers para quando envia um algo que o bot não entende
     app.add_handler(
         MessageHandler(

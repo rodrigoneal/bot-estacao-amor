@@ -1,17 +1,19 @@
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from estacao_do_amor.src.domain.repositories.abstract_repository import (
-    AbstractReposity,
-)
-from estacao_do_amor.src.domain.repositories.correio_repository import (
-    CorreioRepository,
-)
-from estacao_do_amor.src.domain.repositories.podcast_repository import (
-    PodcastRepository,
-)
-from estacao_do_amor.src.domain.repositories.user_menssage_repository import (
-    UserMessageRepository,
-)
+from estacao_do_amor.src.domain.repositories.abstract_repository import \
+    AbstractReposity
+from estacao_do_amor.src.domain.repositories.cerveja_repository import \
+    CervejaRepository
+from estacao_do_amor.src.domain.repositories.confesso_repository import \
+    ConfessoRepository
+from estacao_do_amor.src.domain.repositories.correio_repository import \
+    CorreioRepository
+from estacao_do_amor.src.domain.repositories.feedback_repository import \
+    FeedBackRepository
+from estacao_do_amor.src.domain.repositories.podcast_repository import \
+    PodcastRepository
+from estacao_do_amor.src.domain.repositories.user_menssage_repository import \
+    UserMessageRepository
 
 
 class Repositories:
@@ -56,22 +58,30 @@ class Repositories:
 
 class Repository(Repositories):
     """
-    Classe que define os repositórios utilizados pela aplicação.
+    Classe que representa o Repositório.
+
+    Esta classe é responsável por agrupar os\
+          repositórios utilizados pela aplicação.
 
     Atributos:
-        empresa_repository (EmpresaRepository):
-          O repositório para a entidade Empresa.
-        filial_repository (FilialRepository):
-          O repositório para a entidade Filial.
-        usuario_repository (UsuarioRepository):
-          O repositório para a entidade Usuário.
-        xml_repository (RepositoryXML):
-          O repositório para o XML.
-        xml_dados_repository (RepositoryXMLDados):
-          O repositório para os dados XML.
+        podcast_repository (PodcastRepository): \
+            O repositório para gerenciar os dados de podcasts.
+        correio_repository (CorreioRepository): \
+            O repositório para gerenciar os dados de correio.
+        user_message_repository (UserMessageRepository):\
+              O repositório para gerenciar os dados de mensagens de usuário.
+        confesso_repository (ConfessoRepository):\
+              O repositório para gerenciar os dados de confissões.
+        cerveja_repository (CervejaRepository):\
+              O repositório para gerenciar os dados de cervejas.
+        feedback_repository (FeedBackRepository):\
+              O repositório para gerenciar os dados de feedbacks.
 
     """
 
     podcast_repository: PodcastRepository = PodcastRepository()
     correio_repository: CorreioRepository = CorreioRepository()
     user_message_repository: UserMessageRepository = UserMessageRepository()
+    confesso_repository: ConfessoRepository = ConfessoRepository()
+    cerveja_repository: CervejaRepository = CervejaRepository()
+    feedback_repository: FeedBackRepository = FeedBackRepository()

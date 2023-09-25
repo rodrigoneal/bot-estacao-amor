@@ -1,9 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from estacao_do_amor.src.domain.model import PodcastModel
-from estacao_do_amor.src.domain.repositories.abstract_repository import (
-    AbstractReposity,
-)
+from estacao_do_amor.src.domain.repositories.abstract_repository import \
+    AbstractReposity
 from estacao_do_amor.src.domain.schemas.podcast_schema import Podcast
 
 

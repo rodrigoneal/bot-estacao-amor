@@ -1,7 +1,6 @@
 from estacao_do_amor.src.domain.model import CorreioModel
-from estacao_do_amor.src.domain.repositories.correio_repository import (
-    CorreioRepository,
-)
+from estacao_do_amor.src.domain.repositories.correio_repository import \
+    CorreioRepository
 from estacao_do_amor.src.domain.schemas.correio_schema import Correio
 
 

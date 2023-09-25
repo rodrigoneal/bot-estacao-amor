@@ -2,56 +2,72 @@ from pyrogram import enums
 from pyrogram.client import Client
 from pyrogram.types import CallbackQuery, Message
 
-from estacao_do_amor.src import CONSTANTS, love_bot_responses
+from estacao_do_amor.src import constants
 from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
-from estacao_do_amor.src.domain.repositories.correio_repository import (
-    CorreioRepository,
-)
+from estacao_do_amor.src.domain import usecases
+from estacao_do_amor.src.domain.repositories.repositories import Repository
+from estacao_do_amor.src.domain.schemas.cerveja_schema import Cerveja
+from estacao_do_amor.src.domain.schemas.confesso_schema import Confesso
 from estacao_do_amor.src.domain.schemas.correio_schema import Correio
-from estacao_do_amor.src.domain.usecases import correio_usecase
-
+from estacao_do_amor.src.domain.schemas.feedback_schema import FeedBack
 from estacao_do_amor.src.handlers.util import handler_bot
 
 
-async def new_member_handler(Client: Client, message: Message):
+@handler_bot
+async def new_member_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
     # Loop para cumprimentar cada novo membro individualmente
     for new_member in message.new_chat_members:
         new_member_name = new_member.first_name
-        welcome_text = love_bot_responses.new_member_welcome_response.format(
-            member_name=new_member_name, link_tree=CONSTANTS.LINK_TREE
-        )
-        await message.reply(welcome_text, parse_mode=enums.ParseMode.MARKDOWN)
         await message.reply(
-            love_bot_responses.explained_bot_new_member_response
+            utter_message["utter_boas_vindas_new_member"].text.format(
+                member_name=new_member_name, link_tree=constants.LINK_TREE
+            ),
+            parse_mode=enums.ParseMode.MARKDOWN,
         )
+        await message.reply(utter_message["utter_explicando_new_member"].text)
 
 
-async def left_member_handler(Client: Client, message: Message):
-    await message.reply("Parece que o amor não venceu! 😔")
+@handler_bot
+async def left_member_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
+    await message.reply(utter_message["utter_left_member"].text)
 
 
-async def command_start_handler(Client: Client, message: Message):
-    command = love_bot_responses.start_response
-    await message.reply(command, parse_mode=enums.ParseMode.MARKDOWN)
+@handler_bot
+async def command_start_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
+    await message.reply(
+        utter_message["utter_start"].text, parse_mode=enums.ParseMode.MARKDOWN
+    )
 
 
 async def command_link_handler(Client: Client, message: Message):
-    await message.reply(CONSTANTS.LINK_TREE)
+    await message.reply(constants.LINK_TREE)
 
 
-async def command_help_handler(Client: Client, message: Message):
+@handler_bot
+async def command_help_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
     await message.reply(
-        love_bot_responses.help_response.format(
-            private_chat=CONSTANTS.PRIVATE_CHAT
+        utter_message["utter_help"].text.format(
+            private_chat=constants.PRIVATE_CHAT
         ),
         parse_mode=enums.ParseMode.MARKDOWN,
     )
 
 
-async def command_partner_handler(Client: Client, message: Message):
+@handler_bot
+async def command_partner_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
     await message.reply(
-        love_bot_responses.partner_response.format(
-            link_patner=CONSTANTS.LINK_PATNER
+        utter_message["utter_patner"].text.format(
+            link_patner=constants.LINK_PATNER
         ),
         parse_mode=enums.ParseMode.MARKDOWN,
     )
@@ -61,24 +77,36 @@ async def command_partner_handler(Client: Client, message: Message):
 async def command_correio_handler(
     Client: Client,
     message: Message,
-    repository: CorreioRepository,
+    repository: Repository,
     utter_message: UtterMessage,
 ):
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+
     remetente = None
-    await message.reply(love_bot_responses.correio_first_respose)
+    await message.reply(utter_message["utter_first_response_correio"].text)
     destinatario = await message.chat.ask(
         utter_message["utter_boas_vindas_correio"].text
     )
+    if destinatario.text == "/cancelar":
+        await message.reply(utter_message["utter_cancelar_operacao"].text)
+        return
     identificar_response = utter_message["utter_identicar_correio"]
+
+    Client.on_message
+
     identificar = await message.reply(
         identificar_response.text,
         reply_markup=identificar_response.keyboard,
     )
-    response = await identificar.wait_for_click(alert="Deseja se identificar?")
+    response = await identificar.wait_for_click()
 
     await response.message.edit_text(
         f"{response.message.text} = {response.data}"
     )
+    if response.data == "/cancelar":
+        await message.reply(utter_message["utter_cancelar_operacao"].text)
+        return
     if response.data == "aceito":
         mudar_nome = utter_message["utter_escolher_nome_correio"]
         nome_response = await message.reply(
@@ -89,12 +117,15 @@ async def command_correio_handler(
         await response.message.edit_text(
             f"{response.message.text} = {response.data}"
         )
+        if response.data == "/cancelar":
+            await message.reply(utter_message["utter_cancelar_operacao"].text)
+            return
+
         if response.data == "aceito":
             remetente = message.chat.first_name
         else:
             nome = await message.chat.ask("Escreva seu nome")
             remetente = nome.text
-
     mensagem = await message.chat.ask(
         utter_message["utter_escreva_mensagem_correio"].text
     )
@@ -103,8 +134,12 @@ async def command_correio_handler(
         destinatario=destinatario.text,
         remetente=remetente,
         mensagem=mensagem.text,
+        user_id=user_id,
+        user_name=user_name,
     )
-    await correio_usecase.create(repository=repository, correio_schema=correio)
+    await usecases.correio_usecase.create(
+        repository=repository.correio_repository, correio_schema=correio
+    )
     await message.reply(
         utter_message["utter_agradecendo_correio"].text,
     )
@@ -118,7 +153,7 @@ async def command_confesso_group_handler(
 ):
     await message.reply(
         utter_message["utter_confesso_group"].text.format(
-            private_chat=CONSTANTS.PRIVATE_CHAT
+            private_chat=constants.PRIVATE_CHAT
         )
     )
 
@@ -127,12 +162,20 @@ async def command_confesso_group_handler(
 async def command_confesso_private_handler(
     Client: Client,
     message: Message,
-    repository: CorreioRepository,
+    repository: Repository,
     utter_message: UtterMessage,
 ):
     if message.from_user and message.from_user.is_bot:
         return
-    await message.chat.ask(utter_message["utter_boas_vindas_confesso"].text)
+    user_id = None
+    user_name = None
+
+    confissao = await message.chat.ask(
+        utter_message["utter_boas_vindas_confesso"].text
+    )
+    if confissao.text.startswith("/"):
+        await message.reply(utter_message["utter_cancelar_operacao"].text)
+        return
     utter_fofoca = utter_message["utter_surpresa_confesso"]
     anonimo = await message.reply(
         utter_fofoca.text,
@@ -142,23 +185,81 @@ async def command_confesso_private_handler(
     await response.message.edit_text(
         f"{response.message.text} = {response.data}"
     )
+    if response.data == "/cancelar":
+        await message.reply(utter_message["utter_cancelar_operacao"].text)
+        return
     if response.data == "rejeitado":
-        resposta = (
-            "Pra que me conta a fofoca se eu não posso espalhar?😔,"
-            " mas vou respeitar e venha sempre contar fofoca pra mim."
-        )
+        resposta = utter_message["utter_rejeitado_confesso"].text
     else:
-        resposta = (
-            "Melhor do que ouvir fofoca é contar a fofoca.😈"
-            " Ouça o podcast para ouvir a gente espalhar esse bafão."
-        )
+        resposta = utter_message["utter_agradecendo_confesso"].text
+        user_name = message.from_user.first_name
+        user_id = message.from_user.id
     await message.reply(resposta)
+    confesso = Confesso(
+        mensagem=confissao.text, user_name=user_name, user_id=user_id
+    )
+
+    await usecases.confesso_usecase.create(
+        repository=repository.confesso_repository, confesso_schema=confesso
+    )
+
+@handler_bot
+async def command_feedback_handler_group(Client: Client, message: Message, utter_message: UtterMessage):
+    await message.reply(
+        utter_message["utter_feedback_group"].text.format(
+            private_chat=constants.PRIVATE_CHAT
+        )
+    )
+
+
+@handler_bot
+async def command_feedback_handler(
+    Client: Client,
+    message: Message,
+    utter_message: UtterMessage,
+    repository: Repository,
+):
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+
+    utter_tipo_feedback = utter_message["utter_tipo_feedback"]
+    feedback_message = await message.reply(
+        utter_tipo_feedback.text.format(private_chat=constants.PRIVATE_CHAT),
+        reply_markup=utter_tipo_feedback.keyboard,
+    )
+    tipo_feedback = await feedback_message.wait_for_click()
+
+    feedback = await message.chat.ask(
+        utter_message["utter_mensagem_feedback"].text
+    )
+    utter_entrar_em_contato_feedback = utter_message[
+        "utter_entrar_em_contato_feedback"
+    ]
+
+    pode_contato_click = await message.reply(
+        utter_entrar_em_contato_feedback.text,
+        reply_markup=utter_entrar_em_contato_feedback.keyboard,
+    )
+    entrar_em_contato = await pode_contato_click.wait_for_click()
+    entrar_em_contato = True if entrar_em_contato.data == "aceito" else False
+
+    feedback = FeedBack(
+        user_id=user_id,
+        user_name=user_name,
+        feedback=feedback.text,
+        tipo_sugestao=tipo_feedback.data,
+        pode_contato=entrar_em_contato,
+    )
+    await usecases.feedback_usecase.create(
+        repository=repository.feedback_repository, feedback=feedback
+    )
+    await message.reply(utter_message["utter_agradecer_feedback"].text)
 
 
 async def audio_voice_handler(Client: Client, message: Message):
     await message.reply("Opa! Começou o podcast! 🎙")
     await message.reply_voice(
-        "estacao_do_amor/media/ucrania.mp3",
+        constants.UCRANIA_AUDIO_FILE,
         caption=(
             "Não mande áudios que eu não sou"
             " nenhuma safada pra ficar ouvindo áudios"
@@ -171,42 +272,62 @@ async def audio_voice_handler(Client: Client, message: Message):
 async def picture_handler(Client: Client, message: Message):
     await Client.send_audio(
         message.chat.id,
-        CONSTANTS.ID_PHOTO_NAO_MANDA_FOTO,
+        constants.ID_PHOTO_NAO_MANDA_FOTO,
         caption="Conhece aquela dupla sertaneja NemVi e NemVerei? 😂",
     )
 
 
-async def command_correio_group_handler(Client: Client, message: Message):
+@handler_bot
+async def command_correio_group_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
     await message.reply(
-        love_bot_responses.correio_response.format(
-            private_chat=CONSTANTS.PRIVATE_CHAT
+        utter_message["utter_correio_group"].text.format(
+            private_chat=constants.PRIVATE_CHAT
         )
     )
 
 
-async def command_cerveja_handle(Client: Client, message: Message):
-    await message.chat.ask(love_bot_responses.cerveja_date_response)
-    await message.reply(love_bot_responses.cerveja_response)
+@handler_bot
+async def command_cerveja_handle(
+    Client: Client,
+    message: Message,
+    repository: Repository,
+    utter_message: UtterMessage,
+):
+    data = await message.chat.ask(utter_message["utter_convite_cerveja"].text)
+    await message.reply(utter_message["utter_marcado_cerveja"].text)
+
     await Client.send_venue(
         message.chat.id,
-        **CONSTANTS.LOCATION_PARQUE_MADUREIRA,
+        **constants.LOCATION_PARQUE_MADUREIRA,
         title="Parque Madureira",
         address="Rio de Janeiro",
     )
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+    cerveja = Cerveja(user_id=user_id, user_name=user_name, data=data.text)
+    await usecases.cerveja_usecase.create(
+        repository=repository.cerveja_repository, cerveja_schema=cerveja
+    )
 
 
-async def command_contact_handler(Client: Client, message: Message):
+@handler_bot
+async def command_contact_handler(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
     await message.reply(
-        love_bot_responses.contact_response.format(
-            email_estacao=CONSTANTS.ESTACAO_EMAIL
+        utter_message["utter_email_contato"].text.format(
+            email_estacao=constants.ESTACAO_EMAIL
         ),
         parse_mode=enums.ParseMode.MARKDOWN,
     )
+
     await message.reply(
-        love_bot_responses.contact_member_instagram.format(
-            david_instagram=CONSTANTS.DAVID_INSTAGRAM,
-            rodrigo_instagram=CONSTANTS.RODRIGO_INSTAGRAM,
-            thauan_instagram=CONSTANTS.THAUAN_INSTAGRAM,
+        utter_message["utter_instagram_contato"].text.format(
+            david_instagram=constants.DAVID_INSTAGRAM,
+            rodrigo_instagram=constants.RODRIGO_INSTAGRAM,
+            thauan_instagram=constants.THAUAN_INSTAGRAM,
         ),
         parse_mode=enums.ParseMode.MARKDOWN,
     )

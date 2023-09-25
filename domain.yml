@@ -1,4 +1,9 @@
 responses:
+  utter_first_response_correio:
+    - text: |
+        Então o cupido flechou esse coraçãozinho!💘... Vai lá abra seu coração.
+        Obs: Não mande audio ou imagem
+
   utter_boas_vindas_correio:
     - text: >
         Para quem você quer enviar o correio do amor?
@@ -11,6 +16,17 @@ responses:
           payload: aceito
         - title: Não
           payload: rejeitado
+        - title: Cancelar
+          payload: /cancelar
+
+  utter_correio_group:
+    - text: >
+        Você não pretende revelar seu amor diante de todos,
+         certo? Me convide para uma conversa privada e compartilhe 
+         comigo quem é o(a) sortudo(a). {private_chat}
+
+  utter_cancelar_operacao:
+    - text: "Cancelado. Até mais! 👋"
 
   utter_escolher_nome_correio:
     - text: "Deseja usar o nome: {name}? 🤔"
@@ -19,6 +35,8 @@ responses:
           payload: aceito
         - title: Não
           payload: rejeitado
+        - title: Cancelar
+          payload: /cancelar
 
   utter_escreva_mensagem_correio:
     - text: >
@@ -37,13 +55,12 @@ responses:
         mas mas não quero que todos fiquem sabendo. 
         Me chame no privado
         e faça sua confissao. {private_chat}
-  
+
   utter_boas_vindas_confesso:
-    - text: >
-        Conte logo essa fofoca!\n
-        OBS: Só não mande áudios
-         que eu não sou nenhuma safada pra ficar ouvindo áudios
-  
+    - text: |
+        Conte logo essa fofoca!
+        OBS: Só não mande áudios que eu não sou nenhuma safada pra ficar ouvindo áudios
+
   utter_surpresa_confesso:
     - text: "Menina, Isso é bafão! Eu posso falar isso no podcast? "
     - buttons:
@@ -51,3 +68,137 @@ responses:
           payload: aceito
         - title: Não
           payload: rejeitado
+        - title: Cancelar
+          payload: /cancelar
+
+  utter_rejeitado_confesso:
+    - text: >
+        Pra que me conta a fofoca se eu não posso espalhar?😔,
+        mas vou respeitar e venha sempre contar fofoca pra mim. 🤗
+
+  utter_agradecendo_confesso:
+    - text: >
+        Melhor do que ouvir fofoca é contar a fofoca.😈
+        Ouça o podcast para ouvir a gente espalhar esse bafão.
+
+  utter_convite_cerveja:
+    - text: Me fala a data desse gelo! 🍺 DD/MM
+
+  utter_marcado_cerveja:
+    - text: >
+        Pode deixar que nossa assessoria vai entrar
+        em contato para confirmar o horário, mas o local é certo.
+
+  utter_instagram_contato:
+    - text: >
+        Instagram do [David]({david_instagram}),
+        [Rodrigo]({rodrigo_instagram}) e 
+        [Thauan]({thauan_instagram}) para contato
+
+  utter_email_contato:
+    - text: "Email para contato: [Email]({email_estacao})"
+
+  utter_boas_vindas_new_member:
+    - text: >
+        Bem-vindo ao grupo mais
+        apaixonante, {member_name}! 
+        Clique aqui para o link da 
+        estação do amor [Estação do Amor]({link_tree}).
+
+  utter_explicando_new_member:
+    - text: >
+        Além disso, estamos abertos para receber suas
+        sugestões ou críticas construtivas.
+        Você também pode compartilhar suas
+        confissões mais profundas ou enviar
+        uma mensagem apaixonada no estilo 'correio do amor'.
+        Se tiver alguma dúvida, basta digitar
+        /help, e estaremos prontos para
+        guiá-lo e ajudá-lo a aproveitar ao máximo o bot.
+
+  utter_left_member:
+    - text: >
+        Parece que o amor não venceu! 😔
+
+  utter_start:
+    - text: |
+        **Bem-vindo ao bot do podcast mais apaixonante do mundo!😍😍**
+
+
+        Aqui estão algumas opções para interagir conosco:
+
+        /start: Para começar a usar o bot.🤖
+
+        /confesso: Se você quiser compartilhar uma confissão e me conte essa fofoca😱.
+
+        /correio: Se você deseja enviar uma mensagem no estilo 'correio do amor' e abra seu coração para o seu amor 💌.
+
+        /link: Para obter o link para ouvir e seguir a Estação do Amor 🎙.
+
+        /parceiros: Empresas que ajudam esse podcast 🤝.
+
+        /cerveja: Se quiser convidar a gente para beber a resposta é sempre **SIM** 🍻.
+
+        /contato: Se quiser falar com a gente é só entrar em contato 🗣.
+
+        /hep: Tá entendendo porra nenhuma pede um help que eu tento te ajudar 🤷‍♂️.
+
+        /feedback: Se quiser me ajudar a fazer esse podcast ser cada vez melhor 🦾.
+
+        /cancelar: Se no meio da conversa você não quiser mais continuar basta escrever /cancelar ou se tiver algum botão de interação clique no cancelar 🛑.
+
+
+        Muito amor pra você, __lindx__ 💋
+
+  utter_help:
+    - text: >
+        É a sua primeira vez aqui? Fique tranquilo,
+        estou aqui para te guiar com carinho e ensinar
+        você como funciona.
+        Se você quiser fazer uma confissão,
+        compartilhar uma sugestão ou enviar uma mensagem
+        cheia de amor, basta me chamar na nossa conversa 
+        particular [Apaixonado Bot]({private_chat})! 
+        Se em algum momento da conversa você quiser parar basta escrever /cancelar ou clicar no cancelar quando houver botões na tela.
+        Se quiser a lista completa dos comandos basta digitar /comandos.
+        E se estiver procurando o link para o podcast 
+        mais apaixonante do mundo, é só digitar /link 
+        e você poderá nos ouvir sussurrar 
+        nos seus ouvidinhos.
+
+  utter_patner:
+    - text: |
+        [Ricardo Finanças]({link_patner})
+        Nossa missão é ajudar você a realizar seus sonhos através de uma abordagem cuidadosamente planejada com investimentos estratégicos. 
+        Conte conosco para transformar suas metas em realidade!
+
+  utter_tipo_feedback:
+    - text: |
+        Seu feedback é importante para nós.
+        Você quer fazer elogio, crítica ou sugestão?
+    - buttons:
+        - title: Elogio
+          payload: elogio
+        - title: Crítica
+          payload: critica
+        - title: Sugestão
+          payload: sugestao
+
+  utter_mensagem_feedback:
+    - text: "Estou te ouvindo, pode escrever seu feedback aqui 👇"
+
+  utter_agradecer_feedback:
+    - text: "Obrigado por ajudar a fazer esse podcast ser cada vez melhor! 🤗"
+
+  utter_entrar_em_contato_feedback:
+    - text: Podemos entrar em contato com você em caso de esclarecimentos?
+    - buttons:
+        - title: Sim
+          payload: aceito
+        - title: Não
+          payload: rejeitado
+        - title: Cancelar
+          payload: /cancelar
+
+  utter_feedback_group:
+    - text: Obrigado por se importar com a gente, mas me chama no privado para eu registar seu feedback {private_chat}.
