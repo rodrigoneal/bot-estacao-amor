@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from estacao_do_amor.src.domain.model import FeedBackModel
@@ -17,3 +18,9 @@ class FeedBackRepository(AbstractReposity):
         async with self.async_session_maker() as session:
             session.add(feedback_model)
             await session.commit()
+
+    async def read(self) -> FeedBackModel:
+        async with self.async_session_maker() as session:
+            query = select(FeedBackModel)
+            result = await session.execute(query)
+            return result.scalars().all()

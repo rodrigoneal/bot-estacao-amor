@@ -40,7 +40,7 @@ async def left_member_handler(
 @handler_bot
 async def command_start_handler(
     Client: Client, message: Message, utter_message: UtterMessage
-):  
+):
     await message.reply(
         utter_message["utter_start"].text, parse_mode=enums.ParseMode.MARKDOWN
     )
@@ -75,6 +75,35 @@ async def command_partner_handler(
 
 
 @handler_bot
+async def ver_relatos_handler(
+    Client: Client,
+    message: Message,
+    utter_message: UtterMessage,
+    repository: Repository,
+):
+    utter_ask_relatorio = utter_message["utter_asK_relatorio"]
+    relatorio_ask = await message.reply(
+        utter_ask_relatorio.text, reply_markup=utter_ask_relatorio.keyboard
+    )
+    tipo_relatorio = await relatorio_ask.wait_for_click()
+    if tipo_relatorio.data == "feedback":
+        feedbacks = usecases.feedback_usecase.read(
+            repository=repository.feedback_repository
+        )
+        async for feedback in feedbacks:
+            await message.reply(
+                utter_message["utter_resposta_feedback_relatorio"].text.format(
+                    usuario=feedback.user_name,
+                    feedback=feedback.feedback,
+                    tipo=feedback.tipo_sugestao,
+                    contato=feedback.pode_contato,
+                )
+            )
+        await message.reply("FIM DE RELATÓRIOS")
+        return
+
+
+@handler_bot
 async def command_correio_handler(
     Client: Client,
     message: Message,
@@ -93,8 +122,6 @@ async def command_correio_handler(
         await message.reply(utter_message["utter_cancelar_operacao"].text)
         return
     identificar_response = utter_message["utter_identicar_correio"]
-
-    Client.on_message
 
     identificar = await message.reply(
         identificar_response.text,
@@ -304,21 +331,31 @@ async def command_cerveja_handle(
     data = await message.chat.ask(utter_message["utter_convite_cerveja"].text)
     try:
         day, month = data.text.split("/")
-        agendado = date(year=current_year, month= int(month), day=int(day))
+        agendado = date(year=current_year, month=int(month), day=int(day))
     except Exception as e:
         await message.reply(utter_message["utter_data_errada_cerveja"].text)
-        await message.reply(utter_message["utter_repetir_comando_cerveja"].text)
+        await message.reply(
+            utter_message["utter_repetir_comando_cerveja"].text
+        )
         return
-    
+
     faltam = agendado - today
     if faltam.days < 0:
-        await message.reply(utter_message["utter_data_menor_que_hoje_cerveja"].text)
-        await message.reply(utter_message["utter_repetir_comando_cerveja"].text)
+        await message.reply(
+            utter_message["utter_data_menor_que_hoje_cerveja"].text
+        )
+        await message.reply(
+            utter_message["utter_repetir_comando_cerveja"].text
+        )
         return
     elif faltam.days == 0:
         await message.reply(utter_message["utter_hoje_cerveja"].text)
     else:
-        await message.reply(utter_message["utter_marcado_cerveja"].text.format(faltam=faltam.days))
+        await message.reply(
+            utter_message["utter_marcado_cerveja"].text.format(
+                faltam=faltam.days
+            )
+        )
 
     await message.reply(utter_message["utter_local_cerveja"].text)
 
@@ -327,7 +364,6 @@ async def command_cerveja_handle(
         **constants.LOCATION_PARQUE_MADUREIRA,
         title="Parque Madureira",
         address="Rio de Janeiro",
-
     )
     user_id = message.from_user.id
     user_name = message.from_user.first_name
@@ -365,5 +401,10 @@ async def handle_callback_query(client, query: CallbackQuery):
 
 async def command_commands_handler(Client: Client, message: Message):
     comandos = await Client.get_bot_commands()
-    bot_commands ="\n".join([f"Escreva /{comando.command} {comando.description}" for comando in comandos])
+    bot_commands = "\n".join(
+        [
+            f"Escreva /{comando.command} {comando.description}"
+            for comando in comandos
+        ]
+    )
     await message.reply(bot_commands)

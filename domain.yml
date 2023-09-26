@@ -83,23 +83,22 @@ responses:
 
   utter_convite_cerveja:
     - text: Me fala a data desse gelo! 🍺 DD/MM
-  
+
   utter_data_errada_cerveja:
     - text: Você tem que digitar a data DD/MM, Não precisa passar o ano, eu sei que vai ser esse ano.
-  
+
   utter_repetir_comando_cerveja:
     - text: Mande o comando /cerveja novamente.
-  
+
   utter_data_menor_que_hoje_cerveja:
     - text: Eu vou entender que você digitou a data errada, pois eu não acredito que você está me zoando com uma parada tão seria como cerveja.
 
-
   utter_marcado_cerveja:
     - text: Tá marcado! Daqui a {faltam} dias vai ser dia de cerveja!
-  
+
   utter_hoje_cerveja:
     - text: "Hoje é dia de cerveja! 🍺"
-  
+
   utter_local_cerveja:
     - text: Já sabe até aonde vamos beber né? Madureira!!!
 
@@ -216,3 +215,22 @@ responses:
 
   utter_feedback_group:
     - text: Obrigado por se importar com a gente, mas me chama no privado para eu registar seu feedback {private_chat}.
+
+  utter_asK_relatorio:
+    - text: Você deseja ver que tipo de relatorio?
+    - buttons:
+        - title: Correio do Amor
+          payload: correio
+        - title: FeedBack
+          payload: feedback
+        - title: Confissão
+          payload: confissao
+        - title: Cerveja
+          payload: cerveja
+        - title: Cancelar
+          payload: cancelar
+
+  utter_resposta_feedback_relatorio:
+    - text: |
+        O {usuario}  enviou: {tipo} escrito: {feedback}
+        Em caso de duvidas você {contato} entrar em contato com ele.

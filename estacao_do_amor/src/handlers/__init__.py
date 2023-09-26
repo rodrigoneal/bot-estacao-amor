@@ -66,12 +66,14 @@ def add_handlers(app: Client) -> None:
     )
     app.add_handler(
         MessageHandler(
-            handlers.command_feedback_handler, filters.command("feedback") & filters.private
+            handlers.command_feedback_handler,
+            filters.command("feedback") & filters.private,
         )
     )
     app.add_handler(
         MessageHandler(
-            handlers.command_feedback_handler_group, filters.command("feedback") & filters.group
+            handlers.command_feedback_handler_group,
+            filters.command("feedback") & filters.group,
         )
     )
     app.add_handler(
@@ -80,6 +82,12 @@ def add_handlers(app: Client) -> None:
         )
     )
 
+    app.add_handler(
+        MessageHandler(
+            handlers.ver_relatos_handler,
+            filters.command("relatorio") & (filters.user(907947267) | filters.user(1378479345) | filters.user(6429186104) & filters.private), 
+        )
+    )
 
     # Handlers para quando envia um algo que o bot não entende
     app.add_handler(
@@ -97,7 +105,6 @@ def add_handlers(app: Client) -> None:
             automation_handlers.create_youtube_video, filters.command("video")
         )
     )
-
 
     # Callbacks
     app.add_handler(CallbackQueryHandler(handlers.handle_callback_query))
