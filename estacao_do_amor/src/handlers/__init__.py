@@ -116,7 +116,7 @@ def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
         schedules_handlers.last_episode,
         "cron",
         day_of_week=1,
-        hour=0,
-        minute=12,
+        hour=12,
+        minute=00,
         kwargs={"Client": app},
     )
