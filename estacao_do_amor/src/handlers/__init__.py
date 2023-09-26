@@ -80,6 +80,7 @@ def add_handlers(app: Client) -> None:
         )
     )
 
+
     # Handlers para quando envia um algo que o bot não entende
     app.add_handler(
         MessageHandler(
@@ -103,14 +104,14 @@ def add_handlers(app: Client) -> None:
 
 
 def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
-    scheduler.add_job(
-        schedules_handlers.generate_match,
-        "cron",
-        day_of_week=1,
-        hour=0,
-        minute=42,
-        kwargs={"Client": app},
-    )
+    # scheduler.add_job(
+    #     schedules_handlers.generate_match,
+    #     "cron",
+    #     day_of_week=1,
+    #     hour=0,
+    #     minute=42,
+    #     kwargs={"Client": app},
+    # )
 
     scheduler.add_job(
         schedules_handlers.last_episode,
@@ -120,3 +121,4 @@ def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
         minute=00,
         kwargs={"Client": app},
     )
+    pass
