@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 selenium-tools = {git = "https://github.com/rodrigoneal/selenium_tools"}
 apscheduler = "3.10.4"
 moviepy = "1.0.3"
