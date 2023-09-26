@@ -83,11 +83,25 @@ responses:
 
   utter_convite_cerveja:
     - text: Me fala a data desse gelo! 🍺 DD/MM
+  
+  utter_data_errada_cerveja:
+    - text: Você tem que digitar a data DD/MM, Não precisa passar o ano, eu sei que vai ser esse ano.
+  
+  utter_repetir_comando_cerveja:
+    - text: Mande o comando /cerveja novamente.
+  
+  utter_data_menor_que_hoje_cerveja:
+    - text: Eu vou entender que você digitou a data errada, pois eu não acredito que você está me zoando com uma parada tão seria como cerveja.
+
 
   utter_marcado_cerveja:
-    - text: >
-        Pode deixar que nossa assessoria vai entrar
-        em contato para confirmar o horário, mas o local é certo.
+    - text: Tá marcado! Daqui a {faltam} dias vai ser dia de cerveja!
+  
+  utter_hoje_cerveja:
+    - text: "Hoje é dia de cerveja! 🍺"
+  
+  utter_local_cerveja:
+    - text: Já sabe até aonde vamos beber né? Madureira!!!
 
   utter_instagram_contato:
     - text: >

@@ -11,6 +11,7 @@ from estacao_do_amor.src.domain.schemas.confesso_schema import Confesso
 from estacao_do_amor.src.domain.schemas.correio_schema import Correio
 from estacao_do_amor.src.domain.schemas.feedback_schema import FeedBack
 from estacao_do_amor.src.handlers.util import handler_bot
+from datetime import date
 
 
 @handler_bot
@@ -203,8 +204,11 @@ async def command_confesso_private_handler(
         repository=repository.confesso_repository, confesso_schema=confesso
     )
 
+
 @handler_bot
-async def command_feedback_handler_group(Client: Client, message: Message, utter_message: UtterMessage):
+async def command_feedback_handler_group(
+    Client: Client, message: Message, utter_message: UtterMessage
+):
     await message.reply(
         utter_message["utter_feedback_group"].text.format(
             private_chat=constants.PRIVATE_CHAT
@@ -295,14 +299,35 @@ async def command_cerveja_handle(
     repository: Repository,
     utter_message: UtterMessage,
 ):
+    today = date.today()
+    current_year = today.year
     data = await message.chat.ask(utter_message["utter_convite_cerveja"].text)
-    await message.reply(utter_message["utter_marcado_cerveja"].text)
+    try:
+        day, month = data.text.split("/")
+        agendado = date(year=current_year, month= int(month), day=int(day))
+    except Exception as e:
+        await message.reply(utter_message["utter_data_errada_cerveja"].text)
+        await message.reply(utter_message["utter_repetir_comando_cerveja"].text)
+        return
+    
+    faltam = agendado - today
+    if faltam.days < 0:
+        await message.reply(utter_message["utter_data_menor_que_hoje_cerveja"].text)
+        await message.reply(utter_message["utter_repetir_comando_cerveja"].text)
+        return
+    elif faltam.days == 0:
+        await message.reply(utter_message["utter_hoje_cerveja"].text)
+    else:
+        await message.reply(utter_message["utter_marcado_cerveja"].text.format(faltam=faltam.days))
+
+    await message.reply(utter_message["utter_local_cerveja"].text)
 
     await Client.send_venue(
         message.chat.id,
         **constants.LOCATION_PARQUE_MADUREIRA,
         title="Parque Madureira",
         address="Rio de Janeiro",
+
     )
     user_id = message.from_user.id
     user_name = message.from_user.first_name
@@ -336,3 +361,9 @@ async def command_contact_handler(
 async def handle_callback_query(client, query: CallbackQuery):
     data = query.data
     await query.message.reply(data)
+
+
+async def command_commands_handler(Client: Client, message: Message):
+    comandos = await Client.get_bot_commands()
+    bot_commands ="\n".join([f"Escreva /{comando.command} {comando.description}" for comando in comandos])
+    await message.reply(bot_commands)

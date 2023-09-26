@@ -74,6 +74,11 @@ def add_handlers(app: Client) -> None:
             handlers.command_feedback_handler_group, filters.command("feedback") & filters.group
         )
     )
+    app.add_handler(
+        MessageHandler(
+            handlers.command_commands_handler, filters.command("comandos")
+        )
+    )
 
     # Handlers para quando envia um algo que o bot não entende
     app.add_handler(
@@ -91,6 +96,7 @@ def add_handlers(app: Client) -> None:
             automation_handlers.create_youtube_video, filters.command("video")
         )
     )
+
 
     # Callbacks
     app.add_handler(CallbackQueryHandler(handlers.handle_callback_query))
