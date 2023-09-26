@@ -20,9 +20,7 @@ async def generate_match(Client: Client):
     random.shuffle(members)
     # Pega os dois primeiros membros e coloca em uma lista
     couple_members = members[0:2]
-    with NamedTemporaryFile(suffix=".jpg") as first_file, NamedTemporaryFile(
-        suffix=".jpg"
-    ) as second_file:
+    with NamedTemporaryFile(suffix=".jpg", delete=False) as first_file, NamedTemporaryFile(suffix=".jpg", delete=False) as second_file:
         for member, file_name in zip(
             couple_members, (first_file, second_file)
         ):
@@ -40,7 +38,7 @@ async def generate_match(Client: Client):
             user.foto = foto
             users.append(user)
         create_match(*users)  # Criando o casal
-        with NamedTemporaryFile(suffix=".png") as file:
+        with NamedTemporaryFile(suffix=".png", delete=False) as file:
             download_image_match(file.name)  # Baixando a imagem do tinder
             await Client.send_photo(
                 constants.ESTACAO_ID,

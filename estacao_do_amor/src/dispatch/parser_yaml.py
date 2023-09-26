@@ -11,7 +11,7 @@ class DataMessage(NamedTuple):
 
 class UtterMessage:
     def __init__(self):
-        with open("domain.yml", "r") as stream:
+        with open("domain.yml", "r", encoding="utf-8") as stream:
             try:
                 self.yaml_data = yaml.safe_load(stream)
             except yaml.YAMLError as exc:

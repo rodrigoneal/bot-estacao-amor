@@ -106,9 +106,9 @@ def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
     scheduler.add_job(
         schedules_handlers.generate_match,
         "cron",
-        day_of_week=6,
+        day_of_week=1,
         hour=0,
-        minute=23,
+        minute=42,
         kwargs={"Client": app},
     )
 
@@ -117,6 +117,6 @@ def message_scheduler(scheduler: AsyncIOScheduler, app: Client) -> None:
         "cron",
         day_of_week=1,
         hour=0,
-        minute=20,
+        minute=12,
         kwargs={"Client": app},
     )

@@ -2,7 +2,7 @@ from types import MappingProxyType
 from typing import Final
 
 LINK_TREE: Final[str] = "https://linktr.ee/estacaodoamorpod"
-ESTACAO_ID: Final[int] = -1001900097110
+ESTACAO_ID: Final[int] = -1001806057230
 PRIVATE_CHAT: Final[str] = "https://t.me/estacaodoamorbot"
 ID_AUDIO_UCRANIA: Final[
     str
@@ -27,3 +27,5 @@ URL_SPOTIFY: Final[
 ] = "https://open.spotify.com/show/4xSaSaM9N3aIIJdycGvjTJ?si=5b081ca4364f4a87"
 URI_INDEX = "estacao_do_amor/src/match/static/index.html"
 UCRANIA_AUDIO_FILE: Final[str] = "estacao_do_amor/media/ucrania.mp3"
+# ESTACAO_ID: Final[int] = -1001900097110
+# -1001806057230

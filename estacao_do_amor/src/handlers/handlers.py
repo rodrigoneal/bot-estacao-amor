@@ -40,7 +40,7 @@ async def left_member_handler(
 @handler_bot
 async def command_start_handler(
     Client: Client, message: Message, utter_message: UtterMessage
-):
+):  
     await message.reply(
         utter_message["utter_start"].text, parse_mode=enums.ParseMode.MARKDOWN
     )
