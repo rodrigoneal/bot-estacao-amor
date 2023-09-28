@@ -36,6 +36,8 @@ def add_handlers(app: Client) -> None:
             filters.command("correio") & filters.group,
         )
     )
+    
+
     app.add_handler(
         MessageHandler(
             handlers.command_correio_handler,

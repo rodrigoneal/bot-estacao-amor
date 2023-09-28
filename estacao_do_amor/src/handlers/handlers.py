@@ -25,11 +25,16 @@ async def new_member_handler(
         new_member_name = new_member.first_name
         await message.reply(
             utter_message["utter_boas_vindas_new_member"].text.format(
-                member_name=new_member_name, link_tree=constants.LINK_TREE
+                member_name=new_member_name,
+                parse_mode=enums.ParseMode.MARKDOWN,
             ),
-            parse_mode=enums.ParseMode.MARKDOWN,
         )
-        await message.reply(utter_message["utter_explicando_new_member"].text)
+        await message.reply(
+            utter_message["utter_explicando_new_member"].text.format(
+                link_tree=constants.LINK_TREE,
+                parse_mode=enums.ParseMode.MARKDOWN
+            )
+        )
 
 
 @handler_manager
@@ -88,12 +93,11 @@ async def ver_relatos_handler(
         utter_ask_relatorio.text, reply_markup=utter_ask_relatorio.keyboard
     )
     tipo_relatorio = await relatorio_ask.wait_for_click()
-    relatos_resolver = RelatosResolver(repository=repository, message=message, utter_message=utter_message)
-    await relatos_resolver.resolver(message_type=tipo_relatorio.data)
-    await message.reply(
-        utter_message["utter_fim_relatorio"].text
+    relatos_resolver = RelatosResolver(
+        repository=repository, message=message, utter_message=utter_message
     )
-    
+    await relatos_resolver.resolver(message_type=tipo_relatorio.data)
+    await message.reply(utter_message["utter_fim_relatorio"].text)
 
 
 @handler_manager
@@ -129,24 +133,9 @@ async def command_correio_handler(
         await message.reply(utter_message["utter_cancelar_operacao"].text)
         return
     if response.data == "aceito":
-        mudar_nome = utter_message["utter_escolher_nome_correio"]
-        nome_response = await message.reply(
-            mudar_nome.text.format(name=message.chat.first_name),
-            reply_markup=mudar_nome.keyboard,
-        )
-        response = await nome_response.wait_for_click()
-        await response.message.edit_text(
-            f"{response.message.text} = {response.data}"
-        )
-        if response.data == "/cancelar":
-            await message.reply(utter_message["utter_cancelar_operacao"].text)
-            return
-
-        if response.data == "aceito":
-            remetente = message.chat.first_name
-        else:
-            nome = await message.chat.ask("Escreva seu nome")
-            remetente = nome.text
+            remetente = user_name
+    else:
+        remetente = "Anonimo"
     mensagem = await message.chat.ask(
         utter_message["utter_escreva_mensagem_correio"].text
     )

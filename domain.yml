@@ -7,7 +7,7 @@ responses:
   utter_boas_vindas_correio:
     - text: >
         Para quem você quer enviar o correio do amor?
-        Fala o nome do(a) sortudo(a) 👩‍❤️‍👨 💌"
+        Escreva o nome do(a) sortudo(a) 👩‍❤️‍👨 💌"
 
   utter_identicar_correio:
     - text: Deseja se identificar? 🤔
@@ -115,19 +115,12 @@ responses:
     - text: >
         Bem-vindo ao grupo mais
         apaixonante, {member_name}! 
-        Clique aqui para o link da 
-        estação do amor [Estação do Amor]({link_tree}).
+
 
   utter_explicando_new_member:
     - text: >
-        Além disso, estamos abertos para receber suas
-        sugestões ou críticas construtivas.
-        Você também pode compartilhar suas
-        confissões mais profundas ou enviar
-        uma mensagem apaixonada no estilo 'correio do amor'.
-        Se tiver alguma dúvida, basta digitar
-        /help, e estaremos prontos para
-        guiá-lo e ajudá-lo a aproveitar ao máximo o bot.
+        Clique aqui para o link da 
+        estação do amor [Estação do Amor]({link_tree}).
 
   utter_left_member:
     - text: >
