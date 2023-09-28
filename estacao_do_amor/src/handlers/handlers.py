@@ -13,7 +13,7 @@ from estacao_do_amor.src.domain.schemas.feedback_schema import FeedBack
 from estacao_do_amor.src.utils.handler_manager import handler_manager
 from datetime import date
 
-from estacao_do_amor.src.utils.handler_resolver import feedback_resolver
+from estacao_do_amor.src.utils.handler_resolver import RelatosResolver
 
 
 @handler_manager
@@ -88,12 +88,12 @@ async def ver_relatos_handler(
         utter_ask_relatorio.text, reply_markup=utter_ask_relatorio.keyboard
     )
     tipo_relatorio = await relatorio_ask.wait_for_click()
-    if tipo_relatorio.data == "feedback":
-        await feedback_resolver(repository, message, utter_message)
-        await message.reply("FIM DE RELATÓRIOS")
-        return
+    relatos_resolver = RelatosResolver(repository=repository, message=message, utter_message=utter_message)
+    await relatos_resolver.resolver(message_type=tipo_relatorio.data)
+    await message.reply(
+        utter_message["utter_fim_relatorio"].text
+    )
     
-
 
 
 @handler_manager
@@ -252,6 +252,9 @@ async def command_feedback_handler(
         reply_markup=utter_tipo_feedback.keyboard,
     )
     tipo_feedback = await feedback_message.wait_for_click()
+    await tipo_feedback.message.edit_text(
+        f"{tipo_feedback.message.text} = {tipo_feedback.data}"
+    )
 
     feedback = await message.chat.ask(
         utter_message["utter_mensagem_feedback"].text
@@ -265,7 +268,15 @@ async def command_feedback_handler(
         reply_markup=utter_entrar_em_contato_feedback.keyboard,
     )
     entrar_em_contato = await pode_contato_click.wait_for_click()
+
+    if entrar_em_contato.data == "/cancelar" or feedback.text == "/cancelar":
+        await message.reply(utter_message["utter_cancelar_operacao"].text)
+        return
     entrar_em_contato = True if entrar_em_contato.data == "aceito" else False
+
+    await pode_contato_click.edit_text(
+        f"{pode_contato_click.text} = {pode_contato_click.data}"
+    )
 
     feedback = FeedBack(
         user_id=user_id,

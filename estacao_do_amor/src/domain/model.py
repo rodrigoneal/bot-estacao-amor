@@ -14,7 +14,7 @@ class CorreioModel(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     remetente: Mapped[str | None]
-    destinatario: Mapped[str]
+    destinatario: Mapped[str] = mapped_column(default="Anonimo")
     mensagem: Mapped[str]
     user_id: Mapped[int]
     user_name: Mapped[str]

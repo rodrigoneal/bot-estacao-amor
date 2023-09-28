@@ -1,4 +1,6 @@
-from pydantic import BaseModel, ConfigDict, computed_field, field_validator
+from pydantic import BaseModel, field_validator
+
+from estacao_do_amor.src.domain.schemas import ReadBase
 
 
 class FeedBack(BaseModel):
@@ -8,8 +10,7 @@ class FeedBack(BaseModel):
     tipo_sugestao: str
     pode_contato: bool
 
-class FeedBackRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+class FeedBackRead(ReadBase):    
     user_name: str
     feedback: str
     tipo_sugestao: str

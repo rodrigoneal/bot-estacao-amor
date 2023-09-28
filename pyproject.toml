@@ -22,14 +22,9 @@ python-dateutil = "^2.8.2"
 sqlalchemy = "^2.0.21"
 aiosqlite = "^0.19.0"
 pyyaml = "^6.0.1"
-python-youtube = "^0.9.1"
 authlib = "^1.2.1"
-google-api-python-client = "^2.101.0"
-google-auth-oauthlib = "^1.1.0"
-google-auth-httplib2 = "^0.1.1"
 selenium-recaptcha-solver = "^1.9.0"
 websockets = "^11.0.3"
-selenium-firefox = "^2.0.8"
 
 
 [tool.poetry.group.dev.dependencies]

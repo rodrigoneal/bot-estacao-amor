@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
+from estacao_do_amor.src.domain.schemas import ReadBase
+
 
 class CorreioBase(BaseModel):
     remetente: str | None
@@ -11,6 +13,6 @@ class Correio(CorreioBase):
     user_id: int
     user_name: str
 
-class CorreioRead(CorreioBase):
-    model_config = ConfigDict(from_attributes=True)
+class CorreioRead(ReadBase):
+    pass
 

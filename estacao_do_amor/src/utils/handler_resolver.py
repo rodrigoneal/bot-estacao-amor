@@ -39,40 +39,26 @@ class RelatosResolver:
         async for correio in correios:
             await self.message.reply(
                 self.utter_message[
-                    "utter_resposta_feedback_relatorio"
+                    "utter_resposta_correio_relatorio"
                 ].text.format(
-                    usuario=correio.user_name,
-                    feedback=correio.feedback,
-                    tipo=correio.tipo_sugestao,
-                    contato=correio.pode_contato,
+                    remetente=correio.remetente,
+                    destinatario=correio.destinatario,
+                    mensagem=correio.mensagem,
                 )
             )
 
     async def confesso_resolver(self):
-        confessos = usecases.confesso_usecase.read(
+        confissoes = usecases.confesso_usecase.read(
             repository=self.repository.confesso_repository
         )
-        async for confesso in confessos:
+        async for confesso in confissoes:
             await self.message.reply(
                 self.utter_message[
-                    "utter_resposta_feedback_relatorio"
+                    "utter_resposta_confissao_relatorio"
                 ].text.format(
                     usuario=confesso.user_name,
-                    feedback=confesso.feedback,
-                    tipo=confesso.tipo_sugestao,
-                    contato=confesso.pode_contato,
+                    mensagem=confesso.mensagem,
                 )
-            )
-
-    async def confesso_resolver(self):
-        confessos = usecases.confesso_usecase.read(
-            repository=self.repository.confesso_repository
-        )
-        async for confesso in confessos:
-            await self.message.reply(
-                self.utter_message[
-                    "utter_resposta_feedback_relatorio"
-                ].text.format()
             )
 
     async def cerveja_resolver(self):
@@ -82,6 +68,27 @@ class RelatosResolver:
         async for cerveja in cervejas:
             await self.message.reply(
                 self.utter_message[
-                    "utter_resposta_feedback_relatorio"
-                ].text.format()
+                    "utter_resposta_cerveja_relatorio"
+                ].text.format(
+                    usuario=cerveja.user_name,
+                    data=cerveja.data
+                )
             )
+
+    async def cancelar_resolver(self):
+        await self.message.reply(
+            self.utter_message["utter_cancelar_operacao"].text
+        )
+
+    async def resolver(self, message_type: str):
+        match message_type:
+            case "feedback":
+                await self.feedback_resolver()
+            case "correio":
+                await self.correio_resolver()
+            case "confissao":
+                await self.confesso_resolver()
+            case "cerveja":
+                await self.cerveja_resolver()
+            case _:
+                await self.cancelar_resolver()

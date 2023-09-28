@@ -154,7 +154,7 @@ responses:
 
         /contato: Se quiser falar com a gente é só entrar em contato 🗣.
 
-        /hep: Tá entendendo porra nenhuma pede um help que eu tento te ajudar 🤷‍♂️.
+        /help: Tá entendendo porra nenhuma pede um help que eu tento te ajudar 🤷‍♂️.
 
         /feedback: Se quiser me ajudar a fazer esse podcast ser cada vez melhor 🦾.
 
@@ -221,12 +221,16 @@ responses:
     - buttons:
         - title: Correio do Amor
           payload: correio
+
         - title: FeedBack
           payload: feedback
+
         - title: Confissão
           payload: confissao
+
         - title: Cerveja
           payload: cerveja
+          
         - title: Cancelar
           payload: cancelar
 
@@ -234,3 +238,19 @@ responses:
     - text: |
         O {usuario}  enviou: {tipo} escrito: {feedback}
         Em caso de duvidas você {contato} entrar em contato com ele.
+  
+  utter_resposta_correio_relatorio:
+    - text: |
+        {remetente} Mandou para: {destinatario}
+        {mensagem}
+
+  utter_resposta_confissao_relatorio:
+    - text: |
+        {usuario} Confessou: {mensagem}
+  
+  utter_resposta_cerveja_relatorio:
+    - text: |
+        {usuario} Convidou para tomar uma cerveja no dia {data}
+  
+  utter_fim_relatorio:
+    - text: FIM DOS RELATÓRIOS
