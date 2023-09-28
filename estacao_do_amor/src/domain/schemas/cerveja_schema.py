@@ -1,9 +1,16 @@
-from pydantic import BaseModel
-
-from estacao_do_amor.src.domain.schemas import ReadBase
+from pydantic import BaseModel, ConfigDict
 
 
-class Cerveja(ReadBase):
-    user_id: int
+
+class CervejaBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     user_name: str
     data: str
+
+
+class Cerveja(CervejaBase):
+    user_id: int
+
+
+class CervejaRead(CervejaBase):
+    pass

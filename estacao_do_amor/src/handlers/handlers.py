@@ -93,6 +93,9 @@ async def ver_relatos_handler(
         utter_ask_relatorio.text, reply_markup=utter_ask_relatorio.keyboard
     )
     tipo_relatorio = await relatorio_ask.wait_for_click()
+    await tipo_relatorio.message.edit_text(
+        f"{tipo_relatorio.message.text} = {tipo_relatorio.data}"
+    )
     relatos_resolver = RelatosResolver(
         repository=repository, message=message, utter_message=utter_message
     )
