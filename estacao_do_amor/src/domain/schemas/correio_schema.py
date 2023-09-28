@@ -1,9 +1,16 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
-class Correio(BaseModel):
+class CorreioBase(BaseModel):
     remetente: str | None
     destinatario: str
     mensagem: str
+
+
+class Correio(CorreioBase):
     user_id: int
     user_name: str
+
+class CorreioRead(CorreioBase):
+    model_config = ConfigDict(from_attributes=True)
+

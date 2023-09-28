@@ -19,7 +19,7 @@ class FeedBackRepository(AbstractReposity):
             session.add(feedback_model)
             await session.commit()
 
-    async def read(self) -> FeedBackModel:
+    async def read(self) -> list[FeedBackModel]:
         async with self.async_session_maker() as session:
             query = select(FeedBackModel)
             result = await session.execute(query)

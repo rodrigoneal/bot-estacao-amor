@@ -10,11 +10,13 @@ from estacao_do_amor.src.domain.schemas.cerveja_schema import Cerveja
 from estacao_do_amor.src.domain.schemas.confesso_schema import Confesso
 from estacao_do_amor.src.domain.schemas.correio_schema import Correio
 from estacao_do_amor.src.domain.schemas.feedback_schema import FeedBack
-from estacao_do_amor.src.handlers.util import handler_bot
+from estacao_do_amor.src.utils.handler_manager import handler_manager
 from datetime import date
 
+from estacao_do_amor.src.utils.handler_resolver import feedback_resolver
 
-@handler_bot
+
+@handler_manager
 async def new_member_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
@@ -30,14 +32,14 @@ async def new_member_handler(
         await message.reply(utter_message["utter_explicando_new_member"].text)
 
 
-@handler_bot
+@handler_manager
 async def left_member_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
     await message.reply(utter_message["utter_left_member"].text)
 
 
-@handler_bot
+@handler_manager
 async def command_start_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
@@ -50,7 +52,7 @@ async def command_link_handler(Client: Client, message: Message):
     await message.reply(constants.LINK_TREE)
 
 
-@handler_bot
+@handler_manager
 async def command_help_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
@@ -62,7 +64,7 @@ async def command_help_handler(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_partner_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
@@ -74,7 +76,7 @@ async def command_partner_handler(
     )
 
 
-@handler_bot
+@handler_manager
 async def ver_relatos_handler(
     Client: Client,
     message: Message,
@@ -87,23 +89,14 @@ async def ver_relatos_handler(
     )
     tipo_relatorio = await relatorio_ask.wait_for_click()
     if tipo_relatorio.data == "feedback":
-        feedbacks = usecases.feedback_usecase.read(
-            repository=repository.feedback_repository
-        )
-        async for feedback in feedbacks:
-            await message.reply(
-                utter_message["utter_resposta_feedback_relatorio"].text.format(
-                    usuario=feedback.user_name,
-                    feedback=feedback.feedback,
-                    tipo=feedback.tipo_sugestao,
-                    contato=feedback.pode_contato,
-                )
-            )
+        await feedback_resolver(repository, message, utter_message)
         await message.reply("FIM DE RELATÓRIOS")
         return
+    
 
 
-@handler_bot
+
+@handler_manager
 async def command_correio_handler(
     Client: Client,
     message: Message,
@@ -173,7 +166,7 @@ async def command_correio_handler(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_confesso_group_handler(
     Client: Client,
     message: Message,
@@ -186,7 +179,7 @@ async def command_confesso_group_handler(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_confesso_private_handler(
     Client: Client,
     message: Message,
@@ -232,7 +225,7 @@ async def command_confesso_private_handler(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_feedback_handler_group(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
@@ -243,7 +236,7 @@ async def command_feedback_handler_group(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_feedback_handler(
     Client: Client,
     message: Message,
@@ -308,7 +301,7 @@ async def picture_handler(Client: Client, message: Message):
     )
 
 
-@handler_bot
+@handler_manager
 async def command_correio_group_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):
@@ -319,7 +312,7 @@ async def command_correio_group_handler(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_cerveja_handle(
     Client: Client,
     message: Message,
@@ -373,7 +366,7 @@ async def command_cerveja_handle(
     )
 
 
-@handler_bot
+@handler_manager
 async def command_contact_handler(
     Client: Client, message: Message, utter_message: UtterMessage
 ):

@@ -6,7 +6,7 @@ from estacao_do_amor.src.domain.repositories.repositories import Repository
 from estacao_do_amor.src.infra import db
 
 
-def handler_bot(func: Coroutine):
+def handler_manager(func: Coroutine):
     utter_message = UtterMessage()
     class_repository = func.__annotations__.get("repository")
     if class_repository:

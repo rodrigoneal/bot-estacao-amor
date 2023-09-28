@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from estacao_do_amor.src.domain.model import CorreioModel
@@ -17,3 +18,9 @@ class CorreioRepository(AbstractReposity):
         async with self.async_session_maker() as session:
             session.add(podcast_model)
             await session.commit()
+    
+    async def read(self) -> list[CorreioModel]:
+        async with self.async_session_maker() as session:
+            query = select(CorreioModel)
+            result = await session.execute(query)
+            return result.scalars().all()
