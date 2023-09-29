@@ -152,12 +152,14 @@ async def command_correio_handler(
             file_name = f.name
             await Client.download_media(message=mensagem, file_name=file_name)
             wav_file = voice_to_text.ogg_to_wav(file_name)
-            text = voice_to_text.voice_to_text(wav_file)
-            resposta = await message.chat.ask("Você disse: " + text)
+            mensagem = voice_to_text.voice_to_text(wav_file)
+            await message.chat.ask("Você disse: " + mensagem)
+    else:
+        mensagem = mensagem.text
     correio = Correio(
         destinatario=destinatario.text,
         remetente=remetente,
-        mensagem=mensagem.text,
+        mensagem=mensagem,
         user_id=user_id,
         user_name=user_name,
     )
