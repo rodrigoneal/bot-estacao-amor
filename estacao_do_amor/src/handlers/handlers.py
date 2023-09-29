@@ -1,8 +1,10 @@
+from tempfile import NamedTemporaryFile
 from pyrogram import enums
 from pyrogram.client import Client
 from pyrogram.types import CallbackQuery, Message
 
 from estacao_do_amor.src import constants
+from estacao_do_amor.src.audio_video import voice_to_text
 from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
 from estacao_do_amor.src.domain import usecases
 from estacao_do_amor.src.domain.repositories.repositories import Repository
@@ -12,6 +14,7 @@ from estacao_do_amor.src.domain.schemas.correio_schema import Correio
 from estacao_do_amor.src.domain.schemas.feedback_schema import FeedBack
 from estacao_do_amor.src.utils.handler_manager import handler_manager
 from datetime import date
+
 
 from estacao_do_amor.src.utils.handler_resolver import RelatosResolver
 
@@ -32,7 +35,7 @@ async def new_member_handler(
         await message.reply(
             utter_message["utter_explicando_new_member"].text.format(
                 link_tree=constants.LINK_TREE,
-                parse_mode=enums.ParseMode.MARKDOWN
+                parse_mode=enums.ParseMode.MARKDOWN,
             )
         )
 
@@ -113,8 +116,8 @@ async def command_correio_handler(
     user_id = message.from_user.id
     user_name = message.from_user.first_name
 
-    remetente = None
     await message.reply(utter_message["utter_first_response_correio"].text)
+
     destinatario = await message.chat.ask(
         utter_message["utter_boas_vindas_correio"].text
     )
@@ -136,13 +139,21 @@ async def command_correio_handler(
         await message.reply(utter_message["utter_cancelar_operacao"].text)
         return
     if response.data == "aceito":
-            remetente = user_name
+        remetente = user_name
     else:
         remetente = "Anonimo"
+    await message.reply(utter_message["utter_alert_type_message_correio"].text)
     mensagem = await message.chat.ask(
         utter_message["utter_escreva_mensagem_correio"].text
     )
 
+    if mensagem.voice:
+        with NamedTemporaryFile(suffix=".ogg", delete=False) as f:
+            file_name = f.name
+            await Client.download_media(message=mensagem, file_name=file_name)
+            wav_file = voice_to_text.ogg_to_wav(file_name)
+            text = voice_to_text.voice_to_text(wav_file)
+            resposta = await message.chat.ask("Você disse: " + text)
     correio = Correio(
         destinatario=destinatario.text,
         remetente=remetente,

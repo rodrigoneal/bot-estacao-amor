@@ -1,8 +1,6 @@
 responses:
   utter_first_response_correio:
-    - text: |
-        Então o cupido flechou esse coraçãozinho!💘... Vai lá abra seu coração.
-        Obs: Não mande audio ou imagem
+    - text: Então o cupido flechou esse coraçãozinho!💘... Vai lá abra seu coração.
 
   utter_boas_vindas_correio:
     - text: >
@@ -37,11 +35,16 @@ responses:
           payload: rejeitado
         - title: Cancelar
           payload: /cancelar
+  
+  utter_alert_type_message_correio:
+    - text: >
+       Você pode mandar um áudio ou escrever. Se escolher enviar um áudio, evite quebrar o
+       áudio em vários pedaços, e lembre-se de que está falando com um bot. Fale devagar.
 
   utter_escreva_mensagem_correio:
     - text: >
         Agora deixe seu coração
-        falar e escreva tudo o que sente por essa pessoa. 🤗
+        falar tudo o que sente por essa pessoa. 🤗
 
   utter_agradecendo_correio:
     - text: >

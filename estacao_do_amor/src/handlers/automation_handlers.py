@@ -4,7 +4,7 @@ from io import BytesIO
 from pyrogram.client import Client
 from pyrogram.types import Message
 
-from estacao_do_amor.src.audio_video.video import create_video
+# from estacao_do_amor.src.audio_video.video import create_video
 
 
 async def progress_media(

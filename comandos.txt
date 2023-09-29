@@ -5,6 +5,6 @@ link - Para obter o link para ouvir e seguir a Estação do Amor 🎙.
 parceiros - Empresas que ajudam esse podcast 🤝.
 cerveja - Se quiser convidar a gente para beber a resposta é sempre **SIM** 🍻.
 contato - Se quiser falar com a gente é só entrar em contato 🗣.
-hep - Tá entendendo porra nenhuma pede um help que eu tento te ajudar 🤷‍♂️.
+help - Tá entendendo porra nenhuma pede um help que eu tento te ajudar 🤷‍♂️.
 feedback - Se quiser me ajudar a fazer esse podcast ser cada vez melhor 🦾.
 cancelar - Se no meio da conversa você não quiser mais continuar basta escrever /cancelar ou se tiver algum botão de interação clique no cancelar 🛑.

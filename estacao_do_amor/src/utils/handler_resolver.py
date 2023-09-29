@@ -92,3 +92,17 @@ class RelatosResolver:
                 await self.cerveja_resolver()
             case _:
                 await self.cancelar_resolver()
+
+class CorreioResolver:
+    def __init__(
+        self,
+        repository: Repository,
+        message: Message,
+        utter_message: UtterMessage,
+    ):
+        self.repository = repository
+        self.message = message
+        self.utter_message = utter_message
+
+    async def by_text_resolver(self):
+        pass
