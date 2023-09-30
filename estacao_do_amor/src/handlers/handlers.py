@@ -4,7 +4,7 @@ from pyrogram.client import Client
 from pyrogram.types import CallbackQuery, Message
 
 from estacao_do_amor.src import constants
-from estacao_do_amor.src.audio_video import voice_to_text
+from estacao_do_amor.src.audio_video.voice_message import voice_to_text
 from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
 from estacao_do_amor.src.domain import usecases
 from estacao_do_amor.src.domain.repositories.repositories import Repository
@@ -92,9 +92,7 @@ async def ver_relatos_handler(
     repository: Repository,
 ):
     utter_ask_relatorio = utter_message["utter_asK_relatorio"]
-    relatorio_ask = await message.reply(
-        utter_ask_relatorio.text, reply_markup=utter_ask_relatorio.keyboard
-    )
+    relatorio_ask = await message.reply(**utter_ask_relatorio.to_dict())
     tipo_relatorio = await relatorio_ask.wait_for_click()
     await tipo_relatorio.message.edit_text(
         f"{tipo_relatorio.message.text} = {tipo_relatorio.data}"
@@ -124,11 +122,9 @@ async def command_correio_handler(
     if destinatario.text == "/cancelar":
         await message.reply(utter_message["utter_cancelar_operacao"].text)
         return
-    identificar_response = utter_message["utter_identicar_correio"]
 
     identificar = await message.reply(
-        identificar_response.text,
-        reply_markup=identificar_response.keyboard,
+        **utter_message["utter_identicar_correio"].to_dict()
     )
     response = await identificar.wait_for_click()
 
@@ -148,14 +144,18 @@ async def command_correio_handler(
     )
 
     if mensagem.voice:
-        with NamedTemporaryFile(suffix=".ogg", delete=False) as f:
-            file_name = f.name
-            await Client.download_media(message=mensagem, file_name=file_name)
-            wav_file = voice_to_text.ogg_to_wav(file_name)
-            mensagem = voice_to_text.voice_to_text(wav_file)
-            await message.chat.ask("Você disse: " + mensagem)
+        mensagem = await voice_to_text(Client=Client, mensagem=mensagem)
+        await message.chat.ask(**utter_message["utter_voice_ask_correio"].to_dict())
+        response = await mensagem.wait_for_click()
+        if response.data == "cancelar":
+            await message.reply(utter_message["utter_cancelar_operacao"].text)
+            return
+        elif response.data == "rejeitado":
+            mensagem = await message.chat.ask(utter_message["utter_voice_ask_rejeitado_correio"].text)
+            mensagem = mensagem.text
     else:
         mensagem = mensagem.text
+
     correio = Correio(
         destinatario=destinatario.text,
         remetente=remetente,

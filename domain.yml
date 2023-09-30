@@ -45,7 +45,19 @@ responses:
     - text: >
         Agora deixe seu coração
         falar tudo o que sente por essa pessoa. 🤗
-
+  utter_voice_ask_correio:
+    - text: "Você disse: {message}"
+    - buttons:
+        - title: Sim
+          payload: aceito
+        - title: Não
+          payload: rejeitado
+        - title: Cancelar
+          payload: cancelar
+  utter_voice_ask_rejeitado_correio:
+    - text: |
+        Então escreva a mensagem novamente. 
+        OBS:Você pode copiar a mensagem acima e .
   utter_agradecendo_correio:
     - text: >
         Obrigado por compartilhar
