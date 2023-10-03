@@ -1,8 +1,17 @@
+from tempfile import NamedTemporaryFile
+from typing import TypeVar
+from estacao_do_amor.src.audio_video.voice_message import text_to_voice
 from estacao_do_amor.src.domain import usecases
 from estacao_do_amor.src.domain.repositories.repositories import Repository
 from pyrogram.types import Message
 from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
 from estacao_do_amor.src.domain import usecases
+from pyrogram.types.messages_and_media.message import Message as MessageResponse
+
+from estacao_do_amor.src.domain.schemas.confesso_schema import Confesso
+
+
+T = TypeVar("T", bound=Confesso)
 
 
 class RelatosResolver:
@@ -13,7 +22,7 @@ class RelatosResolver:
         utter_message: UtterMessage,
     ):
         self.repository = repository
-        self.message = message
+        self.message: Message = message
         self.utter_message = utter_message
 
     async def feedback_resolver(self):
@@ -47,22 +56,25 @@ class RelatosResolver:
                 )
             )
 
+    async def long_message(self, mensagem: T):
+        await self.message.reply(
+            self.utter_message[
+                "utter_resposta_confissao_longa_relatorio"
+            ].text.format(usuario=mensagem.user_name)
+        )
+        for i in range(0, len(mensagem.mensagem), 300):
+            await self.message.reply(mensagem.mensagem[i : i + 300])
+        await self.message.reply(f"FIM DA MENSAGEM DE {mensagem.user_name}")
+
     async def confesso_resolver(self):
         confissoes = usecases.confesso_usecase.read(
             repository=self.repository.confesso_repository
         )
         async for confesso in confissoes:
             if len(confesso.mensagem) > 300:
-                for i in range(0, len(confesso.mensagem), 300):
-                    await self.message.reply(
-                        self.utter_message[
-                            "utter_resposta_confissao_relatorio"
-                        ].text.format(
-                            usuario=confesso.user_name,
-                            mensagem=confesso.mensagem[i:i+300],
-                        )
-                    )
-                return
+                await self.long_message_resolver(mensagem=confesso)
+                continue
+
             await self.message.reply(
                 self.utter_message[
                     "utter_resposta_confissao_relatorio"
@@ -80,10 +92,7 @@ class RelatosResolver:
             await self.message.reply(
                 self.utter_message[
                     "utter_resposta_cerveja_relatorio"
-                ].text.format(
-                    usuario=cerveja.user_name,
-                    data=cerveja.data
-                )
+                ].text.format(usuario=cerveja.user_name, data=cerveja.data)
             )
 
     async def cancelar_resolver(self):
@@ -103,6 +112,41 @@ class RelatosResolver:
                 await self.cerveja_resolver()
             case _:
                 await self.cancelar_resolver()
+
+    async def progress_send_audio(self, current:int, total:int, message: MessageResponse):
+        enviado = (current / total) * 100
+        text = f"Enviando audio: {round(enviado, 2)}% Concluído."
+        await message.edit_text(text)
+
+    async def long_message_audio(self, mensagem: T):
+        _mensagem = mensagem.mensagem
+        mensagens:list[str] = _mensagem.replace("...", ".").strip().split(".")
+        mensagens.insert(0, f"Mensagem de {mensagem.user_name}")
+        for i in range(0, len(mensagens), 10):
+            _m = ". ".join(mensagens[i : i + 10])
+            with NamedTemporaryFile(suffix=".mp3", delete=True) as f:
+                message = await self.message.reply(
+                    self.utter_message["utter_mensagem_aviso_audio"]
+                )
+                text_to_voice(text=_m, file_name=f.name)
+                await self.message.reply_voice(voice=f.name, progress=self.progress_send_audio, progress_args=(message,))
+            await message.delete()
+
+    async def long_message_resolver(self, mensagem: T):
+        tipo_response = await self.message.reply(
+            **self.utter_message["utter_mensagem_muito_longa"].to_dict()
+        )
+        click_response = await tipo_response.wait_for_click()
+        await click_response.message.edit_text(
+            f"{click_response.message.text} = {click_response.data}"
+        )
+        if click_response.data == "audio":
+            await self.long_message_audio(mensagem=mensagem)
+        elif click_response.data == "texto":
+            await self.long_message(mensagem=mensagem)
+        else:
+            await self.cancelar_resolver()
+
 
 class CorreioResolver:
     def __init__(

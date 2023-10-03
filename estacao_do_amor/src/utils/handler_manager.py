@@ -4,7 +4,7 @@ from typing import Coroutine
 from estacao_do_amor.src.dispatch.parser_yaml import UtterMessage
 from estacao_do_amor.src.domain.repositories.repositories import Repository
 from estacao_do_amor.src.infra import db
-from estacao_do_amor.src.audio_video import voice_message
+
 
 def handler_manager(func: Coroutine):
     utter_message = UtterMessage()

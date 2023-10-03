@@ -35,11 +35,11 @@ responses:
           payload: rejeitado
         - title: Cancelar
           payload: /cancelar
-  
+
   utter_alert_type_message_correio:
     - text: >
-       Você pode mandar um áudio ou escrever. Se escolher enviar um áudio, evite quebrar o
-       áudio em vários pedaços, e lembre-se de que está falando com um bot. Fale devagar.
+        Você pode mandar um áudio ou escrever. Se escolher enviar um áudio, evite quebrar o
+        áudio em vários pedaços, e lembre-se de que está falando com um bot. Fale devagar.
 
   utter_escreva_mensagem_correio:
     - text: >
@@ -128,8 +128,7 @@ responses:
   utter_boas_vindas_new_member:
     - text: >
         Bem-vindo ao grupo mais
-        apaixonante, {member_name}! 
-
+        apaixonante, {member_name}!
 
   utter_explicando_new_member:
     - text: >
@@ -237,7 +236,7 @@ responses:
 
         - title: Cerveja
           payload: cerveja
-          
+
         - title: Cancelar
           payload: cancelar
 
@@ -245,7 +244,7 @@ responses:
     - text: |
         O {usuario}  enviou: {tipo} escrito: {feedback}
         Em caso de duvidas você {contato} entrar em contato com ele.
-  
+
   utter_resposta_correio_relatorio:
     - text: |
         {remetente} Mandou para: {destinatario}
@@ -254,10 +253,24 @@ responses:
   utter_resposta_confissao_relatorio:
     - text: |
         {usuario} Confessou: {mensagem}
-  
+  utter_resposta_confissao_longa_relatorio:
+    - text: "{usuario} Enviou uma mensagem longa"
   utter_resposta_cerveja_relatorio:
     - text: |
         {usuario} Convidou para tomar uma cerveja no dia {data}
-  
+
   utter_fim_relatorio:
     - text: FIM DOS RELATÓRIOS
+
+  utter_mensagem_muito_longa:
+    - text: |
+        "Mensagem muito longa"
+        "Deseja que eu envie por audio por texto?"
+    - buttons:
+        - title: Audio
+          payload: audio
+        - title: Texto
+          payload: texto
+  
+  utter_mensagem_aviso_audio:
+    - text: "Vai demorar pois estou convertendo a mensagem para audio"
