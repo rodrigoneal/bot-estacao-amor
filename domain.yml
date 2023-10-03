@@ -74,7 +74,6 @@ responses:
   utter_boas_vindas_confesso:
     - text: |
         Conte logo essa fofoca!
-        OBS: Só não mande áudios que eu não sou nenhuma safada pra ficar ouvindo áudios
 
   utter_surpresa_confesso:
     - text: "Menina, Isso é bafão! Eu posso falar isso no podcast? "

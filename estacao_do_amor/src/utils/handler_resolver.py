@@ -52,6 +52,17 @@ class RelatosResolver:
             repository=self.repository.confesso_repository
         )
         async for confesso in confissoes:
+            if len(confesso.mensagem) > 300:
+                for i in range(0, len(confesso.mensagem), 300):
+                    await self.message.reply(
+                        self.utter_message[
+                            "utter_resposta_confissao_relatorio"
+                        ].text.format(
+                            usuario=confesso.user_name,
+                            mensagem=confesso.mensagem[i:i+300],
+                        )
+                    )
+                return
             await self.message.reply(
                 self.utter_message[
                     "utter_resposta_confissao_relatorio"

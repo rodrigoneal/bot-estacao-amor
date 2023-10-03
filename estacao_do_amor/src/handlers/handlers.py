@@ -1,4 +1,3 @@
-from tempfile import NamedTemporaryFile
 from pyrogram import enums
 from pyrogram.client import Client
 from pyrogram.types import CallbackQuery, Message
@@ -155,7 +154,6 @@ async def command_correio_handler(
             mensagem = mensagem.text
     else:
         mensagem = mensagem.text
-
     correio = Correio(
         destinatario=destinatario.text,
         remetente=remetente,
@@ -195,7 +193,7 @@ async def command_confesso_private_handler(
         return
     user_id = None
     user_name = None
-
+    await message.reply(utter_message["utter_alert_type_message_correio"].text)
     confissao = await message.chat.ask(
         utter_message["utter_boas_vindas_confesso"].text
     )

@@ -15,9 +15,7 @@ def add_handlers(app: Client) -> None:
     )
     # Handlers para quando envia um comando
     app.add_handler(
-        MessageHandler(
-            handlers.command_start_handler, filters.command("start")
-        )
+        MessageHandler(handlers.command_start_handler, filters.command("start"))
     )
     app.add_handler(
         MessageHandler(handlers.command_link_handler, filters.command("link"))
@@ -26,9 +24,7 @@ def add_handlers(app: Client) -> None:
         MessageHandler(handlers.command_help_handler, filters.command("help"))
     )
     app.add_handler(
-        MessageHandler(
-            handlers.command_partner_handler, filters.command("parceiros")
-        )
+        MessageHandler(handlers.command_partner_handler, filters.command("parceiros"))
     )
     app.add_handler(
         MessageHandler(
@@ -36,7 +32,6 @@ def add_handlers(app: Client) -> None:
             filters.command("correio") & filters.group,
         )
     )
-    
 
     app.add_handler(
         MessageHandler(
@@ -57,14 +52,10 @@ def add_handlers(app: Client) -> None:
         )
     )
     app.add_handler(
-        MessageHandler(
-            handlers.command_cerveja_handle, filters.command("cerveja")
-        )
+        MessageHandler(handlers.command_cerveja_handle, filters.command("cerveja"))
     )
     app.add_handler(
-        MessageHandler(
-            handlers.command_contact_handler, filters.command("contato")
-        )
+        MessageHandler(handlers.command_contact_handler, filters.command("contato"))
     )
     app.add_handler(
         MessageHandler(
@@ -79,34 +70,35 @@ def add_handlers(app: Client) -> None:
         )
     )
     app.add_handler(
-        MessageHandler(
-            handlers.command_commands_handler, filters.command("comandos")
-        )
+        MessageHandler(handlers.command_commands_handler, filters.command("comandos"))
     )
 
     app.add_handler(
         MessageHandler(
             handlers.ver_relatos_handler,
-            filters.command("relatorio") & (filters.user(907947267) | filters.user(1378479345) | filters.user(6429186104) & filters.private), 
+            filters.command("relatorio")
+            & (
+                filters.user(907947267)
+                | filters.user(1378479345)
+                | filters.user(6429186104) & filters.private
+            ),
         )
     )
 
     # Handlers para quando envia um algo que o bot não entende
     app.add_handler(
-        MessageHandler(
-            handlers.audio_voice_handler, filters.audio | filters.voice
-        )
+        MessageHandler(handlers.audio_voice_handler, filters.audio | filters.voice)
     )
     app.add_handler(
         MessageHandler(handlers.picture_handler, filters.photo | filters.video)
     )
 
     # Handlers automatizar o podcast
-    app.add_handler(
-        MessageHandler(
-            automation_handlers.create_youtube_video, filters.command("video")
-        )
-    )
+    # app.add_handler(
+    #     MessageHandler(
+    #         automation_handlers.create_youtube_video, filters.command("video")
+    #     )
+    # )
 
     # Callbacks
     app.add_handler(CallbackQueryHandler(handlers.handle_callback_query))

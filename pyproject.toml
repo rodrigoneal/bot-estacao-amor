@@ -23,6 +23,7 @@ websockets = "^11.0.3"
 speechrecognition = "^3.10.0"
 beautifulsoup4 = "^4.12.2"
 pydub = "^0.25.1"
+gtts = "^2.3.2"
 
 
 [tool.poetry.group.dev.dependencies]

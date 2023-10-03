@@ -1,5 +1,6 @@
 from io import BufferedRandom
 from tempfile import NamedTemporaryFile
+from gtts import gTTS
 from pydub import AudioSegment
 import speech_recognition as sr
 from pyrogram.client import Client
@@ -27,3 +28,7 @@ async def voice_to_text(Client: Client, mensagem: Message) -> str:
         wav_file = ogg_to_wav(file_name)
         mensagem = _voice_to_text(wav_file)
         return mensagem
+
+def text_to_voice(text: str, file_name: str) -> str:
+    tts = gTTS(text, lang='pt-br') 
+    tts.save(file_name)
