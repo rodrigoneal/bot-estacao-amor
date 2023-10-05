@@ -270,15 +270,15 @@ async def command_feedback_handler(
         utter_entrar_em_contato_feedback.text,
         reply_markup=utter_entrar_em_contato_feedback.keyboard,
     )
-    entrar_em_contato = await pode_contato_click.wait_for_click()
+    q = await pode_contato_click.wait_for_click()
 
-    if entrar_em_contato.data == "/cancelar" or feedback.text == "/cancelar":
+    if q.data == "/cancelar" or feedback.text == "/cancelar":
         await message.reply(utter_message["utter_cancelar_operacao"].text)
         return
-    entrar_em_contato = True if entrar_em_contato.data == "aceito" else False
+    entrar_em_contato = True if q.data == "aceito" else False
 
     await pode_contato_click.edit_text(
-        f"{pode_contato_click.text} = {pode_contato_click.data}"
+        f"{pode_contato_click.text} = {q.data}"
     )
 
     feedback = FeedBack(

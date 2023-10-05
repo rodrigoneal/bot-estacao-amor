@@ -13,6 +13,7 @@ from estacao_do_amor.src.domain.schemas.confesso_schema import Confesso
 
 T = TypeVar("T", bound=Confesso)
 
+# TODO: Fazer com que mensagens longas fiquem salvas, pois o ask só pega uma mensagem.
 
 class RelatosResolver:
     def __init__(
